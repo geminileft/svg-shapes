@@ -23,21 +23,11 @@ function create_flexible_band(x, y, width, height, slim) {
     var element = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path_str = 'm' + x + ',' + y + ' a' + hw + ',20 0 1,0 ' + w +
     // ',0 l' + narrow_slim + ',' + h + ' a' + hnw + ',0 0 1,1 ' + narrow_width + ',0'
-    ',0 l' + narrow_slim + ',' + h + ' a' + hnw + ',13 0 1,1 ' + narrow_width + ',0'
+    ',0 l' + narrow_slim + ',' + h + ' a' + hnw + ',20 0 1,1 ' + narrow_width + ',0'
     element.setAttribute('d', path_str);
     return element;
 }
 
-function create_data_band(x, y, width, height) {
-    const h = height.toString();
-    const w = width.toString();
-    const hw = (parseInt(width) / 2).toString();
-    var element = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path_str = 'm' + x + ',' + y + ' a' + hw + ',20 0 1,0 ' + w +
-        ',0 l0,' + h + ' a' + hw + ',20 0 1,1 -' + w + ',0'
-    element.setAttribute('d', path_str);
-    return element;
-}
 
 function create_ellipse() {
     var element = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
