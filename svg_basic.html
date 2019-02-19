@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <script type="text/javascript" src="./js/utils.js"></script>
+            <script type="text/javascript" src="./js/factory.js"></script>
+    </head>
+<body>
+
+<svg id="my_svg" width="1000" height="700">
+
+    <!--
+<path d="M40,20  A30,30 0 1,0 70,70"
+    style="stroke: #ff0000; stroke-width:2; fill:none;"/>
+
+<path d="M40,20  A30,30 0 1,1 70,70"
+    style="stroke: #00ff00; stroke-width:2; fill:none;"/>
+
+<path d="M40,20  A30,30 0 0,1 70,70"
+    style="stroke: #0000ff; stroke-width:2; fill:none;"/>
+-->
+    Sorry, your browser does not support inline SVG.
+</svg>
+ 
+<script>
+
+    var svg = document.getElementById('my_svg');
+
+    const diag = new DataFlowDiagram(svg);
+    diag.appendMulti(create_db(30, 100, 150, 100));
+    diag.appendMulti(create_object_store(230, 100, 150, 100));
+    diag.appendMulti(create_file_store(430, 100, 150, 100));
+    diag.render();
+
+</script>
+</body>
+</html>
