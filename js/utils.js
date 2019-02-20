@@ -9,6 +9,54 @@ function create_data_top(x, y, width, height) {
     return element;
 }
 
+function create_side_cover(x, y, width, height) {
+    const w = width.toString();
+    const hw = (width / 2).toString();
+    const h = height.toString();
+    const hh = (height / 2).toString();
+    const offset = 1;
+    const x_adjusted = parseInt(x) + offset;
+    var element = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const pos = 'm' + x_adjusted.toString() + ',' + y.toString();
+    const arc1 = 'a10,' + hh + ' 0 1,0 0,' + h;
+    const arc2 = 'a10,' + hh + ' 0 1,0 0,-' + h;
+    const path_str = pos + ' ' + arc1 + ' ' + arc2;
+    element.setAttribute('d', path_str);
+    // element.setAttribute('d', pos + ' ' + arc1 + ' ' + arc2);
+    return element;
+}
+
+function create_side_band(x, y, width, height, slim, unit_size) {
+    const h = height.toString();
+    const w = width.toString();
+    const us = unit_size.toString();
+
+    const iwidth = parseInt(width);
+    const iheight = parseInt(h);
+
+    const nw = iwidth - (slim * 2);    
+    const hnw = (nw / 2).toString();
+
+    const hh = (iheight / 2).toString();
+    const hw = (iwidth / 2).toString();
+    const narrow_slim = '-' + slim.toString();
+    const narrow_width = '-' + (iwidth - (slim * 2)).toString();
+    var element = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+    var _sw = (slim / 2).toString();
+    if (slim == 0) {
+        _sw = '10';
+    }
+    
+    const pos = 'm' + x + ',' + y;
+    const arc1 = 'a10,' + hh + ' 0 1,0 0,' + h;
+    const line = 'l-' + us + ',0';
+    const arc2 = 'a10,' + hh + ' 0 1,1 0,-' + h;
+    path_str = pos + ' ' + arc1 + ' ' + line + ' ' + arc2;
+    element.setAttribute('d', path_str);
+    return element;
+}
+
 function create_flexible_band(x, y, width, height, slim) {
     const h = height.toString();
     const w = width.toString();

@@ -44,3 +44,13 @@ function create_file_store(x, y, width, height) {
     items.push(create_flexible_band(x, (y + 2 * tri_height) + 10, width, tri_height, 0));
     return items;
 }
+
+function create_message_store(x, y, width, height) {
+    const items = [];
+    items.push(create_side_cover(x, y, width, height));
+    const tri_width = width / 3;
+    items.push(create_side_band(x, y, width, height, 0, 40));
+    items.push(create_side_band(x - tri_width + 9, y, width, height, 0, 40));
+    items.push(create_side_band((x - tri_width * 2) + 18, y, width, height, 0, 40));
+    return items;
+}
