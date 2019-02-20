@@ -45,12 +45,16 @@ function create_file_store(x, y, width, height) {
     return items;
 }
 
-function create_message_store(x, y, width, height) {
+function create_message_store(x, y, width, height, opts) {
     const items = [];
-    items.push(create_side_cover(x, y, width, height));
+
+    const offset = (!opts.has('offset') || opts.get('offset') < 1) ? 1 : opts.get('offset');
+    const adj_w = 6 - offset;
+
+    items.push(create_side_cover(x, y, height, opts));
     const tri_width = width / 3;
     items.push(create_side_band(x, y, width, height, 0, 40));
-    items.push(create_side_band(x - tri_width + 9, y, width, height, 0, 40));
-    items.push(create_side_band((x - tri_width * 2) + 18, y, width, height, 0, 40));
+    items.push(create_side_band(x - tri_width + 4 + adj_w, y, width, height, 0, 40));
+    items.push(create_side_band((x - tri_width * 2) + 8 + (2 * adj_w), y, width, height, 0, 40));
     return items;
 }

@@ -1,3 +1,5 @@
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
 function create_data_top(x, y, width, height) {
     const w = width.toString();
     const hw = (width / 2).toString();
@@ -20,19 +22,21 @@ function gen_side_arc1c(height, sweep, negative) {
     return arc1;
 }
 
-function create_side_cover(x, y, width, height) {
-    const w = width.toString();
-    const hw = (width / 2).toString();
-    const h = height.toString();
-    const hh = (height / 2).toString();
-    const offset = 1;
+function create_side_cover(x, y, height, opts) {
+    const element = document.createElementNS(SVG_NS, 'path');
+
+    var offset = 1;
+    if (opts.has('offset')) {
+        offset = opts.get('offset');
+    }
+
     const x_adjusted = parseInt(x) + offset;
-    var element = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     const pos = 'm' + x_adjusted.toString() + ',' + y.toString();
     const arc1 = gen_side_arc1c(height, false, false);
     const arc2 = gen_side_arc1c(height, false, true);
     const path_str = pos + ' ' + arc1 + ' ' + arc2;
     element.setAttribute('d', path_str);
+
     return element;
 }
 
