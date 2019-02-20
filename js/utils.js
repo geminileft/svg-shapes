@@ -28,12 +28,9 @@ function create_side_cover(x, y, width, height) {
 
 function create_side_band(x, y, width, height, slim, unit_size) {
     const h = height.toString();
+    const hh = (h / 2).toString();
     const us = unit_size.toString();
 
-    const iheight = parseInt(h);
-
-
-    const hh = (iheight / 2).toString();
     var element = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
     const pos = 'm' + x + ',' + y;
