@@ -9,18 +9,14 @@ function create_data_top(x, y, width, height) {
     return element;
 }
 
-function gen_side_arc1b(height, reverse) {
+function gen_side_arc1c(height, sweep, negative) {
     const h = height.toString();
     const hh = (height / 2).toString();
-    rv_neg = '';
-    sweep_flag = '0';
 
-    if (reverse) {
-        rv_neg = '-';
-        sweep_flag = '1';
-    }
-    const arc1 = 'a10,' + hh + ' 0 1,' + sweep_flag + ' 0,' + rv_neg + h;
-    // const arc2 = 'a10,' + hh + ' 0 1,1 0,-' + h;
+    rv_neg = negative ? '-' : '';
+    sweep_flag = sweep ? '1' : '0';
+
+    const arc1 = 'a30,' + hh + ' 0 1,' + sweep_flag + ' 0,' + rv_neg + h;
     return arc1;
 }
 
@@ -33,12 +29,10 @@ function create_side_cover(x, y, width, height) {
     const x_adjusted = parseInt(x) + offset;
     var element = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     const pos = 'm' + x_adjusted.toString() + ',' + y.toString();
-    const arc1 = gen_side_arc1b(height, false);
-    // const arc1 = 'a10,' + hh + ' 0 1,0 0,' + h;
-    const arc2 = 'a10,' + hh + ' 0 1,0 0,-' + h;
+    const arc1 = gen_side_arc1c(height, false, false);
+    const arc2 = gen_side_arc1c(height, false, true);
     const path_str = pos + ' ' + arc1 + ' ' + arc2;
     element.setAttribute('d', path_str);
-    // element.setAttribute('d', pos + ' ' + arc1 + ' ' + arc2);
     return element;
 }
 
@@ -50,10 +44,9 @@ function create_side_band(x, y, width, height, slim, unit_size) {
     var element = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
     const pos = 'm' + x + ',' + y;
-    const arc1 = gen_side_arc1b(height, false);
+    const arc1 = gen_side_arc1c(height, false, false);
     const line = 'l-' + us + ',0';
-     const arc2 = gen_side_arc1b(height, true);
-    // const arc2 = 'a10,' + hh + ' 0 1,1 0,-' + h;
+     const arc2 = gen_side_arc1c(height, true, true);
     path_str = pos + ' ' + arc1 + ' ' + line + ' ' + arc2;
     element.setAttribute('d', path_str);
     return element;
