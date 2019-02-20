@@ -28,26 +28,14 @@ function create_side_cover(x, y, width, height) {
 
 function create_side_band(x, y, width, height, slim, unit_size) {
     const h = height.toString();
-    const w = width.toString();
     const us = unit_size.toString();
 
-    const iwidth = parseInt(width);
     const iheight = parseInt(h);
 
-    const nw = iwidth - (slim * 2);    
-    const hnw = (nw / 2).toString();
 
     const hh = (iheight / 2).toString();
-    const hw = (iwidth / 2).toString();
-    const narrow_slim = '-' + slim.toString();
-    const narrow_width = '-' + (iwidth - (slim * 2)).toString();
     var element = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
-    var _sw = (slim / 2).toString();
-    if (slim == 0) {
-        _sw = '10';
-    }
-    
     const pos = 'm' + x + ',' + y;
     const arc1 = 'a10,' + hh + ' 0 1,0 0,' + h;
     const line = 'l-' + us + ',0';
