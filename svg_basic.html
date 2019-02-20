@@ -20,6 +20,7 @@
     diag.appendMulti(create_file_store(730, 200, 150, 100));
     const opts = new Map();
     opts.set('offset', 3);
+    opts.set('bands', 4);
     diag.appendMulti(create_message_store(240, 400, 150, 70, opts));
     diag.render();
 

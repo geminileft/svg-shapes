@@ -47,14 +47,19 @@ function create_file_store(x, y, width, height) {
 
 function create_message_store(x, y, width, height, opts) {
     const items = [];
-
+    const tri_width = width / 3;
+    const unit_width = (!opts.has('unit_width')) ? 40 : opts.get('unit_width');
     const offset = (!opts.has('offset') || opts.get('offset') < 1) ? 1 : opts.get('offset');
-    const adj_w = 6 - offset;
+    const bands = (!opts.has('bands') || opts.get('bands') < 3) ? 3 : opts.get('bands');
+    const adj_w = - offset - 4;
 
     items.push(create_side_cover(x, y, height, opts));
-    const tri_width = width / 3;
-    items.push(create_side_band(x, y, width, height, 0, 40));
-    items.push(create_side_band(x - tri_width + 4 + adj_w, y, width, height, 0, 40));
-    items.push(create_side_band((x - tri_width * 2) + 8 + (2 * adj_w), y, width, height, 0, 40));
+
+    for (var i = 0;i < bands; ++i) {
+        items.push(create_side_band((x - unit_width * i) + (4 * i) + (i * adj_w), y, width, height, 0, unit_width));
+    }
+    // items.push(create_side_band((x - tri_width * 0) + (4 * 0) + (0 * adj_w), y, width, height, 0, 40));
+    // items.push(create_side_band((x - tri_width * 1) + (4 * 1) + (1 * adj_w), y, width, height, 0, 40));
+    // items.push(create_side_band((x - tri_width * 2) + (4 * 2) + (2 * adj_w), y, width, height, 0, 40));
     return items;
 }
