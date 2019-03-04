@@ -85,3 +85,25 @@ function create_gear(x, y, width, height) {
     }
     return items;
 }
+
+function create_transform(x, y, width, height) {
+    const items = [];
+
+    const circle_attribs = {};
+    circle_attribs['stroke']="red";
+    circle_attribs['stroke-width']="3";
+    circle_attribs['fill']="none";
+
+    items.push(create_circle(x, y, width, circle_attribs));
+    var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
+    const transform_group = svg_group({'transform':tf_str, 'stroke':'green', 'fill':'none', "stroke-width":"5"});
+    items.push(transform_group);
+
+    var path_d = "M6.94,39.39 Q34.64,20 37.58,-13.68";
+    transform_group.appendChild(svg_path(path_d));
+    transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)"}));
+    transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)"}));
+    //     <path d="M6.94,39.39 Q34.64,20 37.58,-13.68" stroke="red" fill="none" /> 
+
+    return items;
+}
