@@ -62,9 +62,6 @@ function create_message_store(x, y, width, height, opts) {
 }
 
 function create_gear(x, y, width, height) {
-    //   <circle cx="200" cy="100" r="40" stroke="black" stroke-width="10" fill="none" />
-    //    <path d="m0,-43 l-10,0 l3,-10 l14,0 l3,10 z" stroke-width="1" />
-
     const items = [];
 
     const circle_attribs = {};
@@ -75,14 +72,13 @@ function create_gear(x, y, width, height) {
     items.push(create_circle(x, y, 40, circle_attribs));
 
     var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
-    const gear_group = svg_group({'transform':tf_str});
-    items.push(gear_group, {'stroke-width':'1'});
+    const gear_group = svg_group({'transform':tf_str}, {'stroke-width':'1'});
+    items.push(gear_group);
     
     var path_d = "m0,-43 l-10,0 l3,-10 l14,0 l3,10 z";
     gear_group.appendChild(svg_path(path_d));
 
     for (var i = 1;i < 8; ++i) {
-        //transform="rotate(90, 0, 0)"
         const angle_in_deg = 45 * i;
         tf_str = 'rotate(' + angle_in_deg.toString() + ', 0, 0)';
         gear_group.appendChild(svg_path(path_d, {'transform':tf_str}));
