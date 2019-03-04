@@ -114,13 +114,42 @@ function create_rect() {
     return element;
 }
 
-function create_circle() {
-    var element = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    element.setAttribute('cx', '850');
-    element.setAttribute('cy', '250');
-    element.setAttribute('r', '40');
-    element.setAttribute('stroke', 'green');
-    element.setAttribute('stroke-width', '4');
-    element.setAttribute('fill', 'red');
+function attrib_set(e, attribs) {
+    for (var att in attribs) {
+        e.setAttribute(att, attribs[att]);
+    }
+}
+
+function create_circle(cx, cy, r, attribs) {
+    var element = document.createElementNS(SVG_NS, 'circle');
+    element.setAttribute('cx', cx);
+    element.setAttribute('cy', cy);
+    element.setAttribute('r', r);
+
+    if (attribs !== undefined) {
+        attrib_set(element, attribs);
+    }
+
+    return element;
+}
+
+function svg_path(d, attribs) {
+    var element = document.createElementNS(SVG_NS, 'path');
+    element.setAttribute('d', d);
+
+    if (attribs !== undefined) {
+        attrib_set(element, attribs);
+    }
+
+    return element;
+}
+
+function svg_group(attribs) {
+    var element = document.createElementNS(SVG_NS, 'g');
+
+    if (attribs !== undefined) {
+        attrib_set(element, attribs);
+    }
+
     return element;
 }
