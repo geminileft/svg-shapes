@@ -86,6 +86,10 @@ function create_gear(x, y, width, height) {
     return items;
 }
 
+function toRadians (angle) {
+    return angle * (Math.PI / 180);
+}
+
 function create_transform(x, y, width, height) {
     const items = [];
 
@@ -99,7 +103,18 @@ function create_transform(x, y, width, height) {
     const transform_group = svg_group({'transform':tf_str, 'stroke':'green', 'fill':'none', "stroke-width":"5"});
     items.push(transform_group);
 
-    var path_d = "M6.94,39.39 Q34.64,20 37.58,-13.68";
+    const alpha_offset = 10;
+
+    const start_x = (width * Math.cos(toRadians(-(90 - alpha_offset)))).toString();
+    const start_y = (width * Math.sin(toRadians(-(90 - alpha_offset))) * -1).toString();
+
+    const mid_x = (width * Math.cos(toRadians(-30))).toString();
+    const mid_y = (width * Math.sin(toRadians(-30)) * -1).toString();
+
+    const end_x = (width * Math.cos(toRadians(30 - alpha_offset))).toString();
+    const end_y = (width * Math.sin(toRadians(30 - alpha_offset)) * -1).toString();
+
+    var path_d = "M" + start_x + "," + start_y + " Q" + mid_x + "," + mid_y + " " + end_x + "," + end_y;
     transform_group.appendChild(svg_path(path_d));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)"}));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)"}));
