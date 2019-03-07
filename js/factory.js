@@ -105,14 +105,14 @@ function create_transform(x, y, width, height) {
 
     const alpha_offset = 10;
 
-    const start_x = (width * Math.cos(toRadians(-(90 - alpha_offset)))).toString();
-    const start_y = (width * Math.sin(toRadians(-(90 - alpha_offset))) * -1).toString();
+    const start_x = (width * Math.cos(toRadians(-(90 - alpha_offset))));
+    const start_y = (width * Math.sin(toRadians(-(90 - alpha_offset))) * -1);
 
     const end_x = (width * Math.cos(toRadians(30 - alpha_offset)));
     const end_y = (width * Math.sin(toRadians(30 - alpha_offset)) * -1);
 
     const mpx = (end_x + start_x) / 2.0;
-    const mpy = (end_y - start_y) / 2.0;
+    const mpy = (end_y + start_y) / 2.0;
 
     const end_x_str = end_x.toString();
     const end_y_str = end_y.toString();
@@ -125,10 +125,10 @@ function create_transform(x, y, width, height) {
     const mid_x1 = dx;
     const mid_y1 = dy;
 
-    // const mid_x = mpx;
-    // const mid_y = mpy;
-    const mid_x = (width * Math.cos(toRadians(-30))).toString();
-    const mid_y = (width * Math.sin(toRadians(-30)) * -1).toString();
+    var mid_x = (width * Math.cos(toRadians(-30))).toString();
+    var mid_y = (width * Math.sin(toRadians(-30)) * -1).toString();
+    var mid_x = mpx;
+    var mid_y = mpy;
 
 
     var path_d = "M" + start_x + "," + start_y + " Q" + mid_x + "," + mid_y + " " + end_x_str + "," + end_y_str;
