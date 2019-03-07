@@ -108,13 +108,30 @@ function create_transform(x, y, width, height) {
     const start_x = (width * Math.cos(toRadians(-(90 - alpha_offset)))).toString();
     const start_y = (width * Math.sin(toRadians(-(90 - alpha_offset))) * -1).toString();
 
+    const end_x = (width * Math.cos(toRadians(30 - alpha_offset)));
+    const end_y = (width * Math.sin(toRadians(30 - alpha_offset)) * -1);
+
+    const mpx = (end_x + start_x) / 2.0;
+    const mpy = (end_y - start_y) / 2.0;
+
+    const end_x_str = end_x.toString();
+    const end_y_str = end_y.toString();
+
+
+    // if we define dx=x2-x1 and dy=y2-y1, then the normals are (-dy, dx) and (dy, -dx).
+    const dx = end_x_str - start_x;
+    const dy = end_y_str - start_y;
+
+    const mid_x1 = dx;
+    const mid_y1 = dy;
+
+    // const mid_x = mpx;
+    // const mid_y = mpy;
     const mid_x = (width * Math.cos(toRadians(-30))).toString();
     const mid_y = (width * Math.sin(toRadians(-30)) * -1).toString();
 
-    const end_x = (width * Math.cos(toRadians(30 - alpha_offset))).toString();
-    const end_y = (width * Math.sin(toRadians(30 - alpha_offset)) * -1).toString();
 
-    var path_d = "M" + start_x + "," + start_y + " Q" + mid_x + "," + mid_y + " " + end_x + "," + end_y;
+    var path_d = "M" + start_x + "," + start_y + " Q" + mid_x + "," + mid_y + " " + end_x_str + "," + end_y_str;
     transform_group.appendChild(svg_path(path_d));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)"}));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)"}));
