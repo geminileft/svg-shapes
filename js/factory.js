@@ -159,8 +159,11 @@ function create_transform(x, y, width, height) {
 
     var path_d = "M" + start_x + "," + start_y + " Q" + compare_x + "," + compare_y + " " + end_x + "," + end_y;
     transform_group.appendChild(svg_path(path_d));
-    transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)"}));
-    transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)"}));
+    
+    var path_d = "M" + arc_mid_x + "," + arc_mid_y + " L" + compare_x + "," + compare_y;
+    transform_group.appendChild(svg_path(path_d));
+    // transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)"}));
+    // transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)"}));
 
     return items;
 }
