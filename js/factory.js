@@ -128,7 +128,7 @@ function create_transform(x, y, width, height) {
     items.push(create_circle(x, y, width, circle_attribs));
     
     var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
-    const transform_group = svg_group({'transform':tf_str, 'stroke':'black', 'fill':'none', "stroke-width":"10"});
+    const transform_group = svg_group({'transform':tf_str, 'stroke':'black', 'fill':'none', "stroke-width":"3"});
     items.push(transform_group);
 
     const alpha_offset = 20;
@@ -147,15 +147,15 @@ function create_transform(x, y, width, height) {
     const arc_mid_x = point_on_circle_x(width, -30);
     const arc_mid_y = point_on_circle_y(width, -30);
 
-    const circle_vec = vector_from_points(mid_x, mid_y, arc_mid_x, arc_mid_y);
+    const mid_circle_vec = vector_from_points(mid_x, mid_y, arc_mid_x, arc_mid_y);
     const seg_to_mid_length = Math.sqrt(Math.pow(mid_x - arc_mid_x, 2) + Math.pow(mid_y - arc_mid_y, 2));
 
     const NORM_VEC_X_IDX = 2;
     const NORM_VEC_Y_IDX = 3;
 
     const stretch_factor = 2.1;
-    const compare_x = mid_x + (circle_vec[NORM_VEC_X_IDX] * seg_to_mid_length * stretch_factor);
-    const compare_y = mid_y + (circle_vec[NORM_VEC_Y_IDX] * seg_to_mid_length * stretch_factor);
+    const compare_x = mid_x + (mid_circle_vec[NORM_VEC_X_IDX] * seg_to_mid_length * stretch_factor);
+    const compare_y = mid_y + (mid_circle_vec[NORM_VEC_Y_IDX] * seg_to_mid_length * stretch_factor);
 
     var path_d = "M" + start_x + "," + start_y + " Q" + compare_x + "," + compare_y + " " + end_x + "," + end_y;
     transform_group.appendChild(svg_path(path_d));
