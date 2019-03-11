@@ -150,7 +150,7 @@ function create_transform(x, y, width, height) {
     const arc_mid_x = point_on_circle_x(width, -30);
     const arc_mid_y = point_on_circle_y(width, -30);
 
-    const mid_circle_vec = vector_from_points(mid_x, mid_y, arc_mid_x, arc_mid_y);
+    const mid_circle_vec = vector_from_points(0, 0, arc_mid_x, arc_mid_y);
     const seg_to_mid_length = Math.sqrt(Math.pow(mid_x - arc_mid_x, 2) + Math.pow(mid_y - arc_mid_y, 2));
 
     const stretch_factor = 2.5;
