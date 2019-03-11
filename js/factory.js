@@ -90,6 +90,33 @@ function toRadians (angle) {
     return angle * (Math.PI / 180);
 }
 
+/**
+ * 
+ * @param {*} x1 
+ * @param {*} y1 
+ * @param {*} x2 
+ * @param {*} y2 
+ * returns calculated vector and normalized vector
+ */
+function vector_from_points(x1, y1, x2, y2) {
+    const vec_x = x2 - x1;
+    const vec_y = y2 - y1;
+    const vec_length = Math.sqrt(Math.pow(vec_x, 2) + Math.pow(vec_y, 2));
+    const norm_vec_x = vec_x / vec_length;
+    const norm_vec_y = vec_y / vec_length;
+    return [vec_x, vec_y, norm_vec_x, norm_vec_y];
+}
+
+function point_on_circle_x(width, start_angle) {
+    const circle_x = (width * Math.cos(toRadians(start_angle)));
+    return circle_x;
+}
+
+function point_on_circle_y(width, start_angle) {
+    const circle_y = (width * -1 * Math.sin(toRadians(start_angle)));
+    return circle_y;
+}
+
 function create_transform(x, y, width, height) {
     const items = [];
 
@@ -103,39 +130,59 @@ function create_transform(x, y, width, height) {
     const transform_group = svg_group({'transform':tf_str, 'stroke':'green', 'fill':'none', "stroke-width":"5"});
     items.push(transform_group);
 
-    const alpha_offset = 10;
+    const alpha_offset = 0;
 
-    const start_x = (width * Math.cos(toRadians(-(90 - alpha_offset))));
-    const start_y = (width * Math.sin(toRadians(-(90 - alpha_offset))) * -1);
+    const start_angle = -(90 - alpha_offset);
+    const start_x = point_on_circle_x(width, start_angle);
+    const start_y = point_on_circle_y(width, start_angle);
 
-    const end_x = (width * Math.cos(toRadians(30 - alpha_offset)));
-    const end_y = (width * Math.sin(toRadians(30 - alpha_offset)) * -1);
+    const end_angle = 30 - alpha_offset;
+    const end_x = point_on_circle_x(width, end_angle);
+    const end_y = point_on_circle_y(width, end_angle);
 
-    const mpx = (end_x + start_x) / 2.0;
-    const mpy = (end_y + start_y) / 2.0;
+    const mid_x = (end_x + start_x) / 2.0;
+    const mid_y = (end_y + start_y) / 2.0;
 
     const end_x_str = end_x.toString();
     const end_y_str = end_y.toString();
 
 
     // if we define dx=x2-x1 and dy=y2-y1, then the normals are (-dy, dx) and (dy, -dx).
-    const dx = end_x_str - start_x;
-    const dy = end_y_str - start_y;
+    const dx = (end_x_str - start_x);
+    const dy = -(end_y_str - start_y);
 
-    const mid_x1 = dx;
-    const mid_y1 = dy;
+    const normal_length = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    const norm_x = dx / normal_length;
+    const norm_y = dy / normal_length;
 
-    var mid_x = (width * Math.cos(toRadians(-30))).toString();
-    var mid_y = (width * Math.sin(toRadians(-30)) * -1).toString();
-    var mid_x = mpx;
-    var mid_y = mpy;
+    const arc_length = 10;
+    const adj_x = norm_x * arc_length;
+    const adj_y = norm_y * arc_length;
+
+    // var mid_x = mpx + adj_x;
+    // var mid_y = mpy + adj_y;
+
+    const arc_mid_x = point_on_circle_x(width, -30);
+    const arc_mid_y = point_on_circle_y(width, -30);
+
+    const circle_vec = vector_from_points(mid_x, mid_y, arc_mid_x, arc_mid_y);
+    const seg_to_mid_length = Math.sqrt(Math.pow(mid_x - arc_mid_x, 2) + Math.pow(mid_y - arc_mid_y, 2));
+
+    const NORM_VEC_X_IDX = 2;
+    const NORM_VEC_Y_IDX = 3;
+
+    const stretch_factor = 2.1;
+    const compare_x = mid_x + (circle_vec[NORM_VEC_X_IDX] * seg_to_mid_length * stretch_factor);
+    const compare_y = mid_y + (circle_vec[NORM_VEC_Y_IDX] * seg_to_mid_length * stretch_factor);
 
 
-    var path_d = "M" + start_x + "," + start_y + " Q" + mid_x + "," + mid_y + " " + end_x_str + "," + end_y_str;
+    // var path_d = "M" + start_x + "," + start_y + " Q" + arc_mid_x + "," + arc_mid_y + " " + end_x_str + "," + end_y_str;
+    var path_d = "M" + start_x + "," + start_y + " Q" + compare_x + "," + compare_y + " " + end_x_str + "," + end_y_str;
     transform_group.appendChild(svg_path(path_d));
+    // path_d = "M" + mid_x + "," + mid_y + " L" + arc_mid_x + "," + arc_mid_y;
+    // transform_group.appendChild(svg_path(path_d, {'stroke-width':'1'}));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)"}));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)"}));
-    //     <path d="M6.94,39.39 Q34.64,20 37.58,-13.68" stroke="red" fill="none" /> 
 
     return items;
 }
