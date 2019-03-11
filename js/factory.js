@@ -137,18 +137,19 @@ function create_transform(x, y, width, height) {
     const alpha_offset = 20;
 
     const start_angle = -(90 - alpha_offset);
+    const end_angle = 30 - alpha_offset;
+
     const start_x = point_on_circle_x(width, start_angle);
     const start_y = point_on_circle_y(width, start_angle);
 
-    const end_angle = 30 - alpha_offset;
+    const arc_mid_x = point_on_circle_x(width, -30);
+    const arc_mid_y = point_on_circle_y(width, -30);
+
     const end_x = point_on_circle_x(width, end_angle);
     const end_y = point_on_circle_y(width, end_angle);
 
     const mid_x = (end_x + start_x) / 2.0;
     const mid_y = (end_y + start_y) / 2.0;
-
-    const arc_mid_x = point_on_circle_x(width, -30);
-    const arc_mid_y = point_on_circle_y(width, -30);
 
     const mid_circle_vec = vector_from_points(0, 0, arc_mid_x, arc_mid_y);
     const seg_to_mid_length = Math.sqrt(Math.pow(mid_x - arc_mid_x, 2) + Math.pow(mid_y - arc_mid_y, 2));
