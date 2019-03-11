@@ -126,6 +126,7 @@ function create_transform(x, y, width, height) {
     circle_attribs['fill']="none";
 
     items.push(create_circle(x, y, width, circle_attribs));
+    
     var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
     const transform_group = svg_group({'transform':tf_str, 'stroke':'green', 'fill':'none', "stroke-width":"10"});
     items.push(transform_group);
@@ -143,9 +144,6 @@ function create_transform(x, y, width, height) {
     const mid_x = (end_x + start_x) / 2.0;
     const mid_y = (end_y + start_y) / 2.0;
 
-    const end_x_str = end_x.toString();
-    const end_y_str = end_y.toString();
-
     const arc_mid_x = point_on_circle_x(width, -30);
     const arc_mid_y = point_on_circle_y(width, -30);
 
@@ -159,7 +157,7 @@ function create_transform(x, y, width, height) {
     const compare_x = mid_x + (circle_vec[NORM_VEC_X_IDX] * seg_to_mid_length * stretch_factor);
     const compare_y = mid_y + (circle_vec[NORM_VEC_Y_IDX] * seg_to_mid_length * stretch_factor);
 
-    var path_d = "M" + start_x + "," + start_y + " Q" + compare_x + "," + compare_y + " " + end_x_str + "," + end_y_str;
+    var path_d = "M" + start_x + "," + start_y + " Q" + compare_x + "," + compare_y + " " + end_x + "," + end_y;
     transform_group.appendChild(svg_path(path_d));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)"}));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)"}));
