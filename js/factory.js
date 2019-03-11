@@ -128,7 +128,7 @@ function create_transform(x, y, width, height) {
     items.push(create_circle(x, y, width, circle_attribs));
     
     var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
-    const transform_group = svg_group({'transform':tf_str, 'stroke':'green', 'fill':'none', "stroke-width":"10"});
+    const transform_group = svg_group({'transform':tf_str, 'stroke':'black', 'fill':'none', "stroke-width":"10"});
     items.push(transform_group);
 
     const alpha_offset = 20;
