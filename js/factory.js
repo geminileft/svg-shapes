@@ -122,15 +122,15 @@ function create_transform(x, y, width, height) {
 
     const circle_attribs = {};
     circle_attribs['stroke']="red";
-    circle_attribs['stroke-width']="3";
+    circle_attribs['stroke-width']="1";
     circle_attribs['fill']="none";
 
     items.push(create_circle(x, y, width, circle_attribs));
     var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
-    const transform_group = svg_group({'transform':tf_str, 'stroke':'green', 'fill':'none', "stroke-width":"5"});
+    const transform_group = svg_group({'transform':tf_str, 'stroke':'green', 'fill':'none', "stroke-width":"10"});
     items.push(transform_group);
 
-    const alpha_offset = 0;
+    const alpha_offset = 20;
 
     const start_angle = -(90 - alpha_offset);
     const start_x = point_on_circle_x(width, start_angle);
