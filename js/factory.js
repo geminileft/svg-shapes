@@ -147,9 +147,8 @@ function create_transform(x, y, width, height) {
     const end_y_str = end_y.toString();
 
 
-    // if we define dx=x2-x1 and dy=y2-y1, then the normals are (-dy, dx) and (dy, -dx).
-    const dx = (end_x_str - start_x);
-    const dy = -(end_y_str - start_y);
+    const dx = (end_x - start_x);
+    const dy = -(end_y - start_y);
 
     const normal_length = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
     const norm_x = dx / normal_length;
@@ -158,9 +157,6 @@ function create_transform(x, y, width, height) {
     const arc_length = 10;
     const adj_x = norm_x * arc_length;
     const adj_y = norm_y * arc_length;
-
-    // var mid_x = mpx + adj_x;
-    // var mid_y = mpy + adj_y;
 
     const arc_mid_x = point_on_circle_x(width, -30);
     const arc_mid_y = point_on_circle_y(width, -30);
@@ -176,11 +172,8 @@ function create_transform(x, y, width, height) {
     const compare_y = mid_y + (circle_vec[NORM_VEC_Y_IDX] * seg_to_mid_length * stretch_factor);
 
 
-    // var path_d = "M" + start_x + "," + start_y + " Q" + arc_mid_x + "," + arc_mid_y + " " + end_x_str + "," + end_y_str;
     var path_d = "M" + start_x + "," + start_y + " Q" + compare_x + "," + compare_y + " " + end_x_str + "," + end_y_str;
     transform_group.appendChild(svg_path(path_d));
-    // path_d = "M" + mid_x + "," + mid_y + " L" + arc_mid_x + "," + arc_mid_y;
-    // transform_group.appendChild(svg_path(path_d, {'stroke-width':'1'}));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)"}));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)"}));
 
