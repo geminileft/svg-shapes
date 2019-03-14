@@ -114,8 +114,8 @@ function point_on_circle_y(width, start_angle) {
 
 function create_transform(x, y, width, height) {
     const items = [];
-    const item_size = 2;
-
+    const item_size = 3;
+    const line_width = (item_size * 4).toString();
 
     const circle_attribs = {};
     circle_attribs['stroke']="red";
@@ -123,10 +123,10 @@ function create_transform(x, y, width, height) {
     circle_attribs['fill']="none";
     
     var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
-    const transform_group = svg_group({'transform':tf_str, 'stroke':'black', 'fill':'none', "stroke-width":"8"});
+    const transform_group = svg_group({'transform':tf_str, 'stroke':'black', 'fill':'none', "stroke-width":line_width});
     items.push(transform_group);
 
-    const alpha_offset = 20;
+    const alpha_offset = 12;
 
     const start_angle = -(90 - alpha_offset);
     const end_angle = 30 - alpha_offset;
@@ -156,7 +156,7 @@ function create_transform(x, y, width, height) {
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)"}));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)"}));
 
-    const tri_scale = 5;
+    const tri_scale = 2.7 * item_size;
 
     const triangle_vec_l = vector_from_points(end_x, end_y, 0, 0);
     const tri_x_l = end_x + (triangle_vec_l[NORM_VEC_X_IDX] * tri_scale);
