@@ -93,21 +93,13 @@ function toRadians (angle) {
     return angle * (Math.PI / 180);
 }
 
-/**
- * 
- * @param {*} x1 
- * @param {*} y1 
- * @param {*} x2 
- * @param {*} y2 
- * returns calculated vector and normalized vector
- */
 function vector_from_points(x1, y1, x2, y2) {
-    const vec_x = x2 - x1;
-    const vec_y = y2 - y1;
-    const vec_length = Math.sqrt(Math.pow(vec_x, 2) + Math.pow(vec_y, 2));
-    const norm_vec_x = vec_x / vec_length;
-    const norm_vec_y = vec_y / vec_length;
-    return [vec_x, vec_y, norm_vec_x, norm_vec_y];
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const vec_length = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    const unit_vec_x = dx / vec_length;
+    const unit_vec_y = dy / vec_length;
+    return [dx, dy, unit_vec_x, unit_vec_y, -unit_vec_x, unit_vec_y, unit_vec_x, -unit_vec_y];
 }
 
 function point_on_circle_x(width, start_angle) {
@@ -127,8 +119,6 @@ function create_transform(x, y, width, height) {
     circle_attribs['stroke']="red";
     circle_attribs['stroke-width']="1";
     circle_attribs['fill']="none";
-
-    items.push(create_circle(x, y, width, circle_attribs));
     
     var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
     const transform_group = svg_group({'transform':tf_str, 'stroke':'black', 'fill':'none', "stroke-width":"4"});
@@ -161,11 +151,30 @@ function create_transform(x, y, width, height) {
 
     var path_d = "M" + start_x + "," + start_y + " Q" + compare_x + "," + compare_y + " " + end_x + "," + end_y;
     transform_group.appendChild(svg_path(path_d));
+    transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)"}));
+    transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)"}));
+
+    const tri_scale = 5;
+
+    const triangle_vec_l = vector_from_points(end_x, end_y, 0, 0);
+    const tri_x_l = end_x + (triangle_vec_l[NORM_VEC_X_IDX] * tri_scale);
+    const tri_y_l = end_y + (triangle_vec_l[NORM_VEC_Y_IDX] * tri_scale);
+
+    const triangle_vec_r = vector_from_points(0, 0, end_x, end_y);
+    const tri_x_r = end_x + (triangle_vec_r[NORM_VEC_X_IDX] * tri_scale);
+    const tri_y_r = end_y + (triangle_vec_r[NORM_VEC_Y_IDX] * tri_scale);
+
+    const point_x = end_x + 0 + (triangle_vec_r[NORM_VEC_Y_IDX] * tri_scale);
+    const point_y = end_y + 0 + (-triangle_vec_r[NORM_VEC_X_IDX] * tri_scale);
     
-    // var path_d = "M" + arc_mid_x + "," + arc_mid_y + " L" + compare_x + "," + compare_y;
-    // transform_group.appendChild(svg_path(path_d));
-    // transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)"}));
-    // transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)"}));
+    path_d = "M " + tri_x_l + "," + tri_y_l + " L" + tri_x_r + "," + tri_y_r + " L" + point_x + "," + point_y + " z";
+    transform_group.appendChild(svg_path(path_d, {"stroke-width":"1", 'fill':'black'}));
+    
+    path_d = "M " + tri_x_l + "," + tri_y_l + " L" + tri_x_r + "," + tri_y_r + " L" + point_x + "," + point_y + " z";
+    transform_group.appendChild(svg_path(path_d, {"stroke-width":"1", 'fill':'black', 'transform':"rotate(-120, 0, 0)"}));
+    
+    path_d = "M " + tri_x_l + "," + tri_y_l + " L" + tri_x_r + "," + tri_y_r + " L" + point_x + "," + point_y + " z";
+    transform_group.appendChild(svg_path(path_d, {"stroke-width":"1", 'fill':'black', 'transform':"rotate(-240, 0, 0)"}));
 
     return items;
 }
