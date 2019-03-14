@@ -114,6 +114,8 @@ function point_on_circle_y(width, start_angle) {
 
 function create_transform(x, y, width, height) {
     const items = [];
+    const item_size = 2;
+
 
     const circle_attribs = {};
     circle_attribs['stroke']="red";
@@ -121,7 +123,7 @@ function create_transform(x, y, width, height) {
     circle_attribs['fill']="none";
     
     var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
-    const transform_group = svg_group({'transform':tf_str, 'stroke':'black', 'fill':'none', "stroke-width":"4"});
+    const transform_group = svg_group({'transform':tf_str, 'stroke':'black', 'fill':'none', "stroke-width":"8"});
     items.push(transform_group);
 
     const alpha_offset = 20;
@@ -167,14 +169,16 @@ function create_transform(x, y, width, height) {
     const point_x = end_x + 0 + (triangle_vec_r[NORM_VEC_Y_IDX] * tri_scale);
     const point_y = end_y + 0 + (-triangle_vec_r[NORM_VEC_X_IDX] * tri_scale);
     
+    const size_sf_str = (item_size * 1.3).toString();
+
     path_d = "M " + tri_x_l + "," + tri_y_l + " L" + tri_x_r + "," + tri_y_r + " L" + point_x + "," + point_y + " z";
-    transform_group.appendChild(svg_path(path_d, {"stroke-width":"1", 'fill':'black'}));
+    transform_group.appendChild(svg_path(path_d, {"stroke-width": size_sf_str, 'fill':'black'}));
     
     path_d = "M " + tri_x_l + "," + tri_y_l + " L" + tri_x_r + "," + tri_y_r + " L" + point_x + "," + point_y + " z";
-    transform_group.appendChild(svg_path(path_d, {"stroke-width":"1", 'fill':'black', 'transform':"rotate(-120, 0, 0)"}));
+    transform_group.appendChild(svg_path(path_d, {"stroke-width": size_sf_str, 'fill':'black', 'transform':"rotate(-120, 0, 0)"}));
     
     path_d = "M " + tri_x_l + "," + tri_y_l + " L" + tri_x_r + "," + tri_y_r + " L" + point_x + "," + point_y + " z";
-    transform_group.appendChild(svg_path(path_d, {"stroke-width":"1", 'fill':'black', 'transform':"rotate(-240, 0, 0)"}));
+    transform_group.appendChild(svg_path(path_d, {"stroke-width": size_sf_str, 'fill':'black', 'transform':"rotate(-240, 0, 0)"}));
 
     return items;
 }
