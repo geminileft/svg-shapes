@@ -11,39 +11,6 @@ function gen_side_arc1c(height, sweep, negative) {
     return arc1;
 }
 
-function create_ellipse() {
-    var element = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-    element.setAttribute('cx', '100');
-    element.setAttribute('cy', '50');
-    element.setAttribute('rx', '100');
-    element.setAttribute('ry', '20');
-    return element;
-}
-
-function create_text() {
-    var element = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    element.setAttribute('x', '210');
-    element.setAttribute('y', '250');
-    element.setAttribute('font-size', '30');
-    element.setAttribute('font-family', 'Verdana');
-    element.setAttribute('fill', '#000000');
-    var txt = document.createTextNode("/123456789012345678901234567890");
-    element.appendChild(txt);
-    return element;
-}
-
-function create_rect() {
-    var element = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    element.setAttribute('x', '200');
-    element.setAttribute('y', '200');
-    element.setAttribute('width', '600');
-    element.setAttribute('height', '100');
-    element.setAttribute('stroke', 'black');
-    element.setAttribute('stroke-width', '3');
-    element.setAttribute('fill', 'rgb(0,0,255)');
-    return element;
-}
-
 function attrib_set(e, attribs) {
     for (var att in attribs) {
         e.setAttribute(att, attribs[att]);
