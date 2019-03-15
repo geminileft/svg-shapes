@@ -75,10 +75,14 @@ function diag_message_store(x, y, width, height, opts) {
 
     const x_off = 2 * unit_width;
 
-    items.push(create_side_cover(x + x_off, y - hh, height, opts));
+    var tf_str = 'translate(' + x_off.toString() + ', ' + (-hh).toString() + ')';
+    const message_store_group = svg_group({'transform':tf_str});
+    items.push(message_store_group);
+
+    message_store_group.appendChild(create_side_cover(x, y, height, opts));
 
     for (var i = 0;i < bands; ++i) {
-        items.push(create_side_band((x - unit_width * i) + (4 * i) + (i * adj_w) + x_off, y - hh, width, height, 0, unit_width));
+        message_store_group.appendChild(create_side_band((x - unit_width * i) + (4 * i) + (i * adj_w), y, width, height, 0, unit_width));
     }
 
     items.push(svg_circle(x, y, 5, {'fill':'red'}));
