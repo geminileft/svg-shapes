@@ -24,7 +24,7 @@ DataFlowDiagram.prototype.render = function() {
     }
 }
 
-function create_db(x, y, width, height) {
+function diag_db(x, y, width, height) {
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -32,11 +32,11 @@ function create_db(x, y, width, height) {
     items.push(create_data_top(x - hw, y - hh, width, height));
     items.push(create_flexible_band(x - hw, y - hh, width, height, 0));
 
-    items.push(create_circle(x, y, 5, {'fill':'red'}));
+    items.push(svg_circle(x, y, 5, {'fill':'red'}));
     return items;
 }
 
-function create_object_store(x, y, width, height) {
+function diag_object_store(x, y, width, height) {
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -44,11 +44,11 @@ function create_object_store(x, y, width, height) {
     items.push(create_data_top(x - hw, y - hh, width, height));
     items.push(create_flexible_band(x - hw, y - hh, width, height, 25));
 
-    items.push(create_circle(x, y, 5, {'fill':'red'}));
+    items.push(svg_circle(x, y, 5, {'fill':'red'}));
     return items;
 }
 
-function create_file_store(x, y, width, height) {
+function diag_file_store(x, y, width, height) {
     const items = [];
     const tri_height = height / 3;
     const hw = width / 2;
@@ -59,11 +59,11 @@ function create_file_store(x, y, width, height) {
     items.push(create_flexible_band(x - hw, y + tri_height + 5 - y_off, width, tri_height, 0));
     items.push(create_flexible_band(x - hw, (y + 2 * tri_height) + 10 - y_off, width, tri_height, 0));
 
-    items.push(create_circle(x, y, 5, {'fill':'red'}));
+    items.push(svg_circle(x, y, 5, {'fill':'red'}));
     return items;
 }
 
-function create_message_store(x, y, width, height, opts) {
+function diag_message_store(x, y, width, height, opts) {
     const items = [];
     const tri_width = width / 3;
     const hh = height / 2;
@@ -81,12 +81,12 @@ function create_message_store(x, y, width, height, opts) {
         items.push(create_side_band((x - unit_width * i) + (4 * i) + (i * adj_w) + x_off, y - hh, width, height, 0, unit_width));
     }
 
-    items.push(create_circle(x, y, 5, {'fill':'red'}));
+    items.push(svg_circle(x, y, 5, {'fill':'red'}));
 
     return items;
 }
 
-function create_gear(x, y, width, height) {
+function diag_gear(x, y, width, height) {
     const items = [];
 
     const circle_attribs = {};
@@ -94,7 +94,7 @@ function create_gear(x, y, width, height) {
     circle_attribs['stroke-width']="10";
     circle_attribs['fill']="none";
 
-    items.push(create_circle(x, y, 40, circle_attribs));
+    items.push(svg_circle(x, y, 40, circle_attribs));
 
     var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
     const gear_group = svg_group({'transform':tf_str}, {'stroke-width':'1'});
@@ -109,35 +109,12 @@ function create_gear(x, y, width, height) {
         gear_group.appendChild(svg_path(path_d, {'transform':tf_str}));
     }
 
-    items.push(create_circle(x, y, 5, {'fill':'red'}));
+    items.push(svg_circle(x, y, 5, {'fill':'red'}));
 
     return items;
 }
 
-function toRadians (angle) {
-    return angle * (Math.PI / 180);
-}
-
-function vector_from_points(x1, y1, x2, y2) {
-    const dx = x2 - x1;
-    const dy = y2 - y1;
-    const vec_length = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-    const unit_vec_x = dx / vec_length;
-    const unit_vec_y = dy / vec_length;
-    return [dx, dy, unit_vec_x, unit_vec_y, -unit_vec_x, unit_vec_y, unit_vec_x, -unit_vec_y];
-}
-
-function point_on_circle_x(width, start_angle) {
-    const circle_x = (width * Math.cos(toRadians(start_angle)));
-    return circle_x;
-}
-
-function point_on_circle_y(width, start_angle) {
-    const circle_y = (width * -1 * Math.sin(toRadians(start_angle)));
-    return circle_y;
-}
-
-function create_transform(x, y, width, height) {
+function diag_transform(x, y, width, height) {
     const items = [];
     const item_size = 3;
     const line_width = (item_size * 4).toString();
@@ -205,6 +182,6 @@ function create_transform(x, y, width, height) {
     path_d = "M " + tri_x_l + "," + tri_y_l + " L" + tri_x_r + "," + tri_y_r + " L" + point_x + "," + point_y + " z";
     transform_group.appendChild(svg_path(path_d, {"stroke-width": size_sf_str, 'fill':'black', 'transform':"rotate(-240, 0, 0)"}));
 
-    items.push(create_circle(x, y, 5, {'fill':'red'}));
+    items.push(svg_circle(x, y, 5, {'fill':'red'}));
     return items;
 }
