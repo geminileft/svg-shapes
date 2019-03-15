@@ -29,3 +29,32 @@ function create_flexible_band(x, y, width, height, slim) {
     ',0 l' + narrow_slim + ',' + h + ' a' + hnw + ','+ _sw + ' 0 1,1 ' + narrow_width + ',0'
     return svg_path(path_str);
 }
+
+function create_side_cover(x, y, height, opts) {
+    var offset = 1;
+    if (opts.has('offset')) {
+        offset = opts.get('offset');
+    }
+
+    const x_adjusted = parseInt(x) + offset;
+    const pos = 'm' + x_adjusted.toString() + ',' + y.toString();
+    const arc1 = gen_side_arc1c(height, false, false);
+    const arc2 = gen_side_arc1c(height, false, true);
+    const path_str = pos + ' ' + arc1 + ' ' + arc2;
+
+    return svg_path(path_str);
+}
+
+function create_side_band(x, y, width, height, slim, unit_size) {
+    const h = height.toString();
+    const hh = (h / 2).toString();
+    const us = unit_size.toString();
+
+    const pos = 'm' + x + ',' + y;
+    const arc1 = gen_side_arc1c(height, false, false);
+    const line = 'l-' + us + ',0';
+     const arc2 = gen_side_arc1c(height, true, true);
+    path_str = pos + ' ' + arc1 + ' ' + line + ' ' + arc2;
+
+    return svg_path(path_str);
+}
