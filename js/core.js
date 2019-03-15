@@ -45,31 +45,6 @@ function create_side_band(x, y, width, height, slim, unit_size) {
     return element;
 }
 
-function create_flexible_band(x, y, width, height, slim) {
-    const h = height.toString();
-    const w = width.toString();
-    const iwidth = parseInt(width);
-
-    const nw = iwidth - (slim * 2);    
-    const hnw = (nw / 2).toString();
-
-    const hw = (iwidth / 2).toString();
-    const narrow_slim = '-' + slim.toString();
-    const narrow_width = '-' + (iwidth - (slim * 2)).toString();
-    var element = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-
-    var _sw = (slim / 2).toString();
-    if (slim == 0) {
-        _sw = '20';
-    }
-    
-    path_str = 'm' + x + ',' + y + ' a' + hw + ',20 0 1,0 ' + w +
-    ',0 l' + narrow_slim + ',' + h + ' a' + hnw + ','+ _sw + ' 0 1,1 ' + narrow_width + ',0'
-    element.setAttribute('d', path_str);
-    return element;
-}
-
-
 function create_ellipse() {
     var element = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
     element.setAttribute('cx', '100');
@@ -109,7 +84,7 @@ function attrib_set(e, attribs) {
     }
 }
 
-function create_circle(cx, cy, r, attribs) {
+function svg_circle(cx, cy, r, attribs) {
     var element = document.createElementNS(SVG_NS, 'circle');
     element.setAttribute('cx', cx);
     element.setAttribute('cy', cy);
