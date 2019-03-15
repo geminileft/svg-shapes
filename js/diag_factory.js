@@ -89,16 +89,16 @@ function diag_message_store(x, y, width, height, opts) {
 function diag_gear(x, y, width, height) {
     const items = [];
 
+    var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ') scale(2, 2)';
+    const gear_group = svg_group({'transform':tf_str}, {'stroke-width':'1'});
+    items.push(gear_group);
+
     const circle_attribs = {};
     circle_attribs['stroke']="black";
     circle_attribs['stroke-width']="10";
     circle_attribs['fill']="none";
 
-    items.push(svg_circle(x, y, 40, circle_attribs));
-
-    var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
-    const gear_group = svg_group({'transform':tf_str}, {'stroke-width':'1'});
-    items.push(gear_group);
+    gear_group.appendChild(svg_circle(0, 0, 40, circle_attribs));
     
     var path_d = "m0,-43 l-10,0 l3,-10 l14,0 l3,10 z";
     gear_group.appendChild(svg_path(path_d));
