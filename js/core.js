@@ -1,16 +1,5 @@
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-function create_data_top(x, y, width, height) {
-    const w = width.toString();
-    const hw = (width / 2).toString();
-    const offset = -5;
-    const y_adjusted = parseInt(y) + offset;
-    var element = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    element.setAttribute('d', 'm' + x + ',' + y_adjusted.toString() + ' a' + hw +
-        ',20 0 1,0 ' + w + ',0a' + hw + ',20 0 0,0 -' + w + ',0');
-    return element;
-}
-
 function gen_side_arc1c(height, sweep, negative) {
     const h = height.toString();
     const hh = (height / 2).toString();
