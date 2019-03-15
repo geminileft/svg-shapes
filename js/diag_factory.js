@@ -75,7 +75,7 @@ function diag_message_store(x, y, width, height, opts) {
 
     const x_off = 2 * unit_width;
 
-    var tf_str = 'translate(' + x_off.toString() + ', ' + (-hh).toString() + ')';
+    var tf_str = 'translate(' + x_off.toString() + ', ' + (-hh).toString() + ') scale(1, 1)';
     const message_store_group = svg_group({'transform':tf_str});
     items.push(message_store_group);
 
