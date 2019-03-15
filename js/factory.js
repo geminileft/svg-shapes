@@ -24,7 +24,7 @@ DataFlowDiagram.prototype.render = function() {
     }
 }
 
-function create_db(x, y, width, height) {
+function diag_db(x, y, width, height) {
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -36,7 +36,7 @@ function create_db(x, y, width, height) {
     return items;
 }
 
-function create_object_store(x, y, width, height) {
+function diag_object_store(x, y, width, height) {
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -48,7 +48,7 @@ function create_object_store(x, y, width, height) {
     return items;
 }
 
-function create_file_store(x, y, width, height) {
+function diag_file_store(x, y, width, height) {
     const items = [];
     const tri_height = height / 3;
     const hw = width / 2;
@@ -63,7 +63,7 @@ function create_file_store(x, y, width, height) {
     return items;
 }
 
-function create_message_store(x, y, width, height, opts) {
+function diag_message_store(x, y, width, height, opts) {
     const items = [];
     const tri_width = width / 3;
     const hh = height / 2;
@@ -86,7 +86,7 @@ function create_message_store(x, y, width, height, opts) {
     return items;
 }
 
-function create_gear(x, y, width, height) {
+function diag_gear(x, y, width, height) {
     const items = [];
 
     const circle_attribs = {};
@@ -114,7 +114,7 @@ function create_gear(x, y, width, height) {
     return items;
 }
 
-function create_transform(x, y, width, height) {
+function diag_transform(x, y, width, height) {
     const items = [];
     const item_size = 3;
     const line_width = (item_size * 4).toString();
