@@ -124,7 +124,7 @@ function diag_transform(x, y, width, height) {
     circle_attribs['stroke-width']="1";
     circle_attribs['fill']="none";
     
-    var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
+    var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ') scale(2, 2)';
     const transform_group = svg_group({'transform':tf_str, 'stroke':'black', 'fill':'none', "stroke-width":line_width});
     items.push(transform_group);
 
