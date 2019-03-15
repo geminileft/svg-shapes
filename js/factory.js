@@ -26,41 +26,63 @@ DataFlowDiagram.prototype.render = function() {
 
 function create_db(x, y, width, height) {
     const items = [];
-    items.push(create_data_top(x, y, width, height));
-    items.push(create_flexible_band(x, y, width, height, 0));
+    const hw = width / 2;
+    const hh = height / 2;
+
+    items.push(create_data_top(x - hw, y - hh, width, height));
+    items.push(create_flexible_band(x - hw, y - hh, width, height, 0));
+
+    items.push(create_circle(x, y, 5, {'fill':'red'}));
     return items;
 }
 
 function create_object_store(x, y, width, height) {
     const items = [];
-    items.push(create_data_top(x, y, width, height));
-    items.push(create_flexible_band(x, y, width, height, 25));
+    const hw = width / 2;
+    const hh = height / 2;
+
+    items.push(create_data_top(x - hw, y - hh, width, height));
+    items.push(create_flexible_band(x - hw, y - hh, width, height, 25));
+
+    items.push(create_circle(x, y, 5, {'fill':'red'}));
     return items;
 }
 
 function create_file_store(x, y, width, height) {
     const items = [];
-    items.push(create_data_top(x, y, width, height));
     const tri_height = height / 3;
-    items.push(create_flexible_band(x, y, width, tri_height, 0));
-    items.push(create_flexible_band(x, y + tri_height + 5, width, tri_height, 0));
-    items.push(create_flexible_band(x, (y + 2 * tri_height) + 10, width, tri_height, 0));
+    const hw = width / 2;
+    const y_off = (1.5 * tri_height) + 7;
+
+    items.push(create_data_top(x - hw, y - y_off, width, height));
+    items.push(create_flexible_band(x - hw, y - y_off, width, tri_height, 0));
+    items.push(create_flexible_band(x - hw, y + tri_height + 5 - y_off, width, tri_height, 0));
+    items.push(create_flexible_band(x - hw, (y + 2 * tri_height) + 10 - y_off, width, tri_height, 0));
+
+    items.push(create_circle(x, y, 5, {'fill':'red'}));
     return items;
 }
 
 function create_message_store(x, y, width, height, opts) {
     const items = [];
     const tri_width = width / 3;
+    const hh = height / 2;
+
     const unit_width = (!opts.has('unit_width')) ? 40 : opts.get('unit_width');
     const offset = (!opts.has('offset') || opts.get('offset') < 1) ? 1 : opts.get('offset');
     const bands = (!opts.has('bands') || opts.get('bands') < 3) ? 3 : opts.get('bands');
     const adj_w = - offset - 4;
 
-    items.push(create_side_cover(x, y, height, opts));
+    const x_off = 2 * unit_width;
+
+    items.push(create_side_cover(x + x_off, y - hh, height, opts));
 
     for (var i = 0;i < bands; ++i) {
-        items.push(create_side_band((x - unit_width * i) + (4 * i) + (i * adj_w), y, width, height, 0, unit_width));
+        items.push(create_side_band((x - unit_width * i) + (4 * i) + (i * adj_w) + x_off, y - hh, width, height, 0, unit_width));
     }
+
+    items.push(create_circle(x, y, 5, {'fill':'red'}));
+
     return items;
 }
 
@@ -86,6 +108,9 @@ function create_gear(x, y, width, height) {
         tf_str = 'rotate(' + angle_in_deg.toString() + ', 0, 0)';
         gear_group.appendChild(svg_path(path_d, {'transform':tf_str}));
     }
+
+    items.push(create_circle(x, y, 5, {'fill':'red'}));
+
     return items;
 }
 
@@ -180,5 +205,6 @@ function create_transform(x, y, width, height) {
     path_d = "M " + tri_x_l + "," + tri_y_l + " L" + tri_x_r + "," + tri_y_r + " L" + point_x + "," + point_y + " z";
     transform_group.appendChild(svg_path(path_d, {"stroke-width": size_sf_str, 'fill':'black', 'transform':"rotate(-240, 0, 0)"}));
 
+    items.push(create_circle(x, y, 5, {'fill':'red'}));
     return items;
 }
