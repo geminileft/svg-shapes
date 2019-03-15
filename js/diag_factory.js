@@ -90,7 +90,7 @@ function diag_gear(x, y, width, height) {
     const items = [];
 
     var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ') scale(2, 2)';
-    const gear_group = svg_group({'transform':tf_str}, {'stroke-width':'1'});
+    const gear_group = svg_group({'transform':tf_str, 'stroke-width':'1'});
     items.push(gear_group);
 
     const circle_attribs = {};
