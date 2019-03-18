@@ -29,12 +29,12 @@ function diag_db(x, y, width, height) {
     const hw = width / 2;
     const hh = height / 2;
 
-    var tf_str = 'translate(' + (- hw).toString() + ', ' + (-hh).toString() + ') scale(1, 1)';
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(1.5, 1.5)';
     const db_group = svg_group({'transform':tf_str});
     items.push(db_group);
 
-    db_group.appendChild(create_data_top(x, y, width, height));
-    db_group.appendChild(create_flexible_band(x, y, width, height, 0));
+    db_group.appendChild(create_data_top(- hw, -hh, width, height));
+    db_group.appendChild(create_flexible_band(- hw, -hh, width, height, 0));
 
     items.push(svg_circle(x, y, 5, {'fill':'red'}));
     return items;
