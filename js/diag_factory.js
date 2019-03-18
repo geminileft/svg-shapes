@@ -58,10 +58,16 @@ function diag_file_store(x, y, width, height) {
     const hw = width / 2;
     const y_off = (1.5 * tri_height) + 7;
 
-    items.push(create_data_top(x - hw, y - y_off, width, height));
-    items.push(create_flexible_band(x - hw, y - y_off, width, tri_height, 0));
-    items.push(create_flexible_band(x - hw, y + tri_height + 5 - y_off, width, tri_height, 0));
-    items.push(create_flexible_band(x - hw, (y + 2 * tri_height) + 10 - y_off, width, tri_height, 0));
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(1.5, 1.5)';
+    const file_store_group = svg_group({'transform':tf_str});
+    items.push(file_store_group);
+
+    // message_store_group.appendChild(create_side_cover(0 + x_off, 0 - hh, height, opts));
+
+    file_store_group.appendChild(create_data_top(- hw, - y_off, width, height));
+    file_store_group.appendChild(create_flexible_band(- hw, - y_off, width, tri_height, 0));
+    file_store_group.appendChild(create_flexible_band(- hw, tri_height + 5 - y_off, width, tri_height, 0));
+    file_store_group.appendChild(create_flexible_band(- hw, (2 * tri_height) + 10 - y_off, width, tri_height, 0));
 
     items.push(svg_circle(x, y, 5, {'fill':'red'}));
     return items;
@@ -79,7 +85,6 @@ function diag_message_store(x, y, width, height, opts) {
 
     const x_off = 2 * unit_width;
 
-    // var tf_str = 'translate(' + x_off.toString() + ', ' + (-hh).toString() + ') scale(1, 1)';
     var tf_str = 'translate(' + x + ', ' + y + ') scale(1.5, 1.5)';
     const message_store_group = svg_group({'transform':tf_str});
     items.push(message_store_group);
