@@ -64,3 +64,14 @@ function svg_rect(x, y, w, h, attribs) {
 
     return element;
 }
+
+function svg_polygon(points, attribs) {
+    var element = document.createElementNS(SVG_NS, 'polygon');
+    element.setAttribute('points', points);
+
+    if (attribs !== undefined) {
+        attrib_set(element, attribs);
+    }
+
+    return element;
+}
