@@ -50,3 +50,17 @@ function svg_group(attribs) {
 
     return element;
 }
+
+function svg_rect(x, y, w, h, attribs) {
+    var element = document.createElementNS(SVG_NS, 'rect');
+    element.setAttribute('x', x);
+    element.setAttribute('y', y);
+    element.setAttribute('width', w);
+    element.setAttribute('height', h);
+
+    if (attribs !== undefined) {
+        attrib_set(element, attribs);
+    }
+
+    return element;
+}

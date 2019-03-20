@@ -201,3 +201,32 @@ function diag_transform(x, y, width, height) {
     items.push(svg_circle(x, y, 5, {'fill':'red'}));
     return items;
 }
+
+function diag_server(x, y, width, height) {
+    const items = [];
+    const hw = width / 2;
+    const hh = height / 2;
+
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(1.5, 1.5)';
+    const db_group = svg_group({'transform':tf_str});
+    items.push(db_group);
+
+    const x_off = 11;
+    const y_start = 13;
+    const drive_height_pctg = .07;
+    const drive_off_pctg = .021;
+
+    const drive_x = - hw + x_off;
+    const drive_y = -hh + y_start;
+    const drive_width = width - (x_off * 2);
+    const drive_height = height * drive_height_pctg;
+    const drive_attribs = {'rx':'2', 'ry':'2', 'fill':'gray'};
+
+    db_group.appendChild(svg_rect(- hw, -hh, width, height, {'rx':'5', 'ry':'5'}));
+    db_group.appendChild(svg_rect(drive_x, drive_y, drive_width, drive_height, drive_attribs));
+    db_group.appendChild(svg_rect(drive_x, drive_y + drive_height + (height * drive_off_pctg), drive_width, drive_height, drive_attribs));
+    db_group.appendChild(svg_rect(drive_x, drive_y + (2 * (drive_height + (height * drive_off_pctg))), drive_width, drive_height, drive_attribs));
+
+    items.push(svg_circle(x, y, 5, {'fill':'red'}));
+    return items;
+}
