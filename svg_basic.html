@@ -24,7 +24,7 @@
     var svg = document.getElementById('my_svg');
 
     const diag = new DataFlowDiagram(svg);
-    diag.appendMulti(diag_db(x1, y1, 150, 100));
+    diag.appendMulti(diag_server(x1, y1, 100, 150));
     diag.appendMulti(diag_object_store(x2, y1, 150, 100));
     diag.appendMulti(diag_file_store(x3, y1, 150, 100));
     var opts = new Map();
