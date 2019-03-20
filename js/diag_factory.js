@@ -230,3 +230,33 @@ function diag_server(x, y, width, height) {
     items.push(svg_circle(x, y, 5, {'fill':'red'}));
     return items;
 }
+
+function diag_flatfile(x, y) {
+    const items = [];
+
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(1.5, 1.5)';
+    const item_group = svg_group({'transform':tf_str});
+    items.push(item_group);
+
+    const x_scale = 8.5;
+    const y_scale = 11;
+
+    const sc = 6;
+
+    const n_off = x_scale * 3.5;
+
+    const lx = (-x_scale * sc).toString();
+    const nrx = ((x_scale * sc) - n_off).toString();
+    const rx = (x_scale * sc).toString();
+
+    const qy = ((-y_scale * sc) + n_off).toString();
+
+    const ty = (-y_scale * sc).toString();
+    const by = (y_scale * sc).toString();
+
+    const poly_pts = lx + ", " + ty + " " + nrx + ", " + ty + " " + rx + ", " + qy + " " + rx + ", " + by + " " + lx + ", " + by;
+    item_group.appendChild(svg_polygon(poly_pts));
+
+    items.push(svg_circle(x, y, 5, {'fill':'red'}));
+    return items;
+}
