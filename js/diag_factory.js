@@ -24,7 +24,10 @@ DataFlowDiagram.prototype.render = function() {
     }
 }
 
-function diag_db(x, y, width, height) {
+function diag_db(x, y) {
+    const width = 150;
+    const height = 100;
+
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -40,7 +43,10 @@ function diag_db(x, y, width, height) {
     return items;
 }
 
-function diag_object_store(x, y, width, height) {
+function diag_object_store(x, y) {
+    const width = 150;
+    const height = 100;
+
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -56,7 +62,10 @@ function diag_object_store(x, y, width, height) {
     return items;
 }
 
-function diag_file_store(x, y, width, height) {
+function diag_file_store(x, y) {
+    const width = 150;
+    const height = 100;
+
     const items = [];
     const tri_height = height / 3;
     const hw = width / 2;
@@ -75,7 +84,10 @@ function diag_file_store(x, y, width, height) {
     return items;
 }
 
-function diag_message_store(x, y, width, height, opts) {
+function diag_message_store(x, y, opts) {
+    const width = 150;
+    const height = 70;
+
     const items = [];
     const tri_width = width / 3;
     const hh = height / 2;
@@ -102,7 +114,7 @@ function diag_message_store(x, y, width, height, opts) {
     return items;
 }
 
-function diag_gear(x, y, width, height) {
+function diag_gear(x, y) {
     const items = [];
 
     var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ') scale(2, 2)';
@@ -130,7 +142,8 @@ function diag_gear(x, y, width, height) {
     return items;
 }
 
-function diag_transform(x, y, width, height) {
+function diag_transform(x, y) {
+    const width = 40;
     const items = [];
     const item_size = 3;
     const line_width = (item_size * 4).toString();
@@ -202,7 +215,10 @@ function diag_transform(x, y, width, height) {
     return items;
 }
 
-function diag_server(x, y, width, height) {
+function diag_server(x, y) {
+    const width = 100;
+    const height = 150;
+
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -261,7 +277,9 @@ function diag_flatfile(x, y) {
     return items;
 }
 
-function diag_report(x, y, width, height) {
+function diag_report(x, y) {
+    const width = 150;
+    const height = 100;
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
