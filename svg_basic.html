@@ -27,13 +27,7 @@
     diag.appendMulti(diag_server(x1, y1));
     diag.appendMulti(diag_object_store(x2, y1));
     diag.appendMulti(diag_file_store(x3, y1));
-    var opts = new Map();
-    opts.set('offset', 3);
-    opts.set('bands', 4);
-    diag.appendMulti(diag_message_store(x1, y2, opts));
-    opts = new Map();
-    opts.set('offset', 3);
-    opts.set('bands', 4);
+    diag.appendMulti(diag_message_store(x1, y2));
     diag.appendMulti(diag_gear(x2, y2));
     diag.appendMulti(diag_transform(x3, y2));
     diag.render();
