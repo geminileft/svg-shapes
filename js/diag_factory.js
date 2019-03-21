@@ -84,7 +84,11 @@ function diag_file_store(x, y) {
     return items;
 }
 
-function diag_message_store(x, y, opts) {
+function diag_message_store(x, y) {
+    const opts = new Map();
+    opts.set('offset', 3);
+    opts.set('bands', 4);
+    
     const width = 150;
     const height = 70;
 
