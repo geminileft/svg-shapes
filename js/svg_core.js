@@ -67,7 +67,7 @@ function svg_polygon(points, attribs) {
 }
 
 function svg_line(x1, y1, x2, y2, stroke_color, attribs) {
-    const element = svg_el('polygon', attribs);
+    const element = svg_el('line', attribs);
     element.setAttribute('x1', x1.toString());
     element.setAttribute('y1', y1.toString());
     element.setAttribute('x2', x2.toString());

@@ -32,7 +32,7 @@ function diag_db(x, y) {
     const hw = width / 2;
     const hh = height / 2;
 
-    var tf_str = 'translate(' + x + ', ' + y + ') scale(1.5, 1.5)';
+    var tf_str = 'translate(' + x + ', ' + y + ')';
     const db_group = svg_group({'transform':tf_str});
     items.push(db_group);
 
@@ -51,7 +51,7 @@ function diag_object_store(x, y) {
     const hw = width / 2;
     const hh = height / 2;
 
-    var tf_str = 'translate(' + x + ', ' + y + ') scale(1.5, 1.5)';
+    var tf_str = 'translate(' + x + ', ' + y + ')';
     const object_store_group = svg_group({'transform':tf_str});
     items.push(object_store_group);
 
@@ -71,7 +71,7 @@ function diag_file_store(x, y) {
     const hw = width / 2;
     const y_off = (1.5 * tri_height) + 7;
 
-    var tf_str = 'translate(' + x + ', ' + y + ') scale(1.5, 1.5)';
+    var tf_str = 'translate(' + x + ', ' + y + ')';
     const file_store_group = svg_group({'transform':tf_str});
     items.push(file_store_group);
 
@@ -103,7 +103,7 @@ function diag_message_store(x, y) {
 
     const x_off = 2 * unit_width;
 
-    var tf_str = 'translate(' + x + ', ' + y + ') scale(1.5, 1.5)';
+    var tf_str = 'translate(' + x + ', ' + y + ')';
     const message_store_group = svg_group({'transform':tf_str});
     items.push(message_store_group);
 
@@ -121,7 +121,7 @@ function diag_message_store(x, y) {
 function diag_gear(x, y) {
     const items = [];
 
-    var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ') scale(2, 2)';
+    var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
     const gear_group = svg_group({'transform':tf_str, 'stroke-width':'1'});
     items.push(gear_group);
 
@@ -157,7 +157,7 @@ function diag_transform(x, y) {
     circle_attribs['stroke-width']="1";
     circle_attribs['fill']="none";
     
-    var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ') scale(2, 2)';
+    var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
     const transform_group = svg_group({'transform':tf_str, 'stroke':'black', 'fill':'none', "stroke-width":line_width});
     items.push(transform_group);
 
@@ -227,7 +227,7 @@ function diag_server(x, y) {
     const hw = width / 2;
     const hh = height / 2;
 
-    var tf_str = 'translate(' + x + ', ' + y + ') scale(1.5, 1.5)';
+    var tf_str = 'translate(' + x + ', ' + y + ')';
     const db_group = svg_group({'transform':tf_str});
     items.push(db_group);
 
@@ -254,7 +254,7 @@ function diag_server(x, y) {
 function diag_flatfile(x, y) {
     const items = [];
 
-    var tf_str = 'translate(' + x + ', ' + y + ') scale(1.5, 1.5)';
+    var tf_str = 'translate(' + x + ', ' + y + ')';
     const item_group = svg_group({'transform':tf_str});
     items.push(item_group);
 
@@ -290,13 +290,14 @@ function diag_report(x, y) {
     const sc_off = 15;
     const sc_base_w = 20; //width of the screen base
 
-    var tf_str = 'translate(' + x + ', ' + y + ') scale(1.5, 1.5)';
+    var tf_str = 'translate(' + x + ', ' + y + ')';
     const db_group = svg_group({'transform':tf_str});
     items.push(db_group);
 
     const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
 
     db_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
+
     db_group.appendChild(svg_line(0, sc_off + 5, 0, hh, 'black', {'stroke-width':'5'}))
     db_group.appendChild(svg_line(-sc_base_w, hh, sc_base_w, hh, 'black', {'stroke-width':'5'}))
 
