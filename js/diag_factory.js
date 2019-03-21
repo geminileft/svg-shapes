@@ -255,7 +255,7 @@ function diag_flatfile(x, y) {
     const items = [];
 
     var tf_str = 'translate(' + x + ', ' + y + ')';
-    const item_group = svg_group({'transform':tf_str});
+    const item_group = svg_group({'transform':tf_str, 'fill':'none', 'stroke':'black', 'stroke-width':'5'});
     items.push(item_group);
 
     const x_scale = 8.5;
