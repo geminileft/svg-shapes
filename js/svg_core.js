@@ -75,3 +75,19 @@ function svg_polygon(points, attribs) {
 
     return element;
 }
+
+function svg_line(x1, y1, x2, y2, stroke_color, attribs) {
+    var element = document.createElementNS(SVG_NS, 'line');
+
+    if (attribs !== undefined) {
+        attrib_set(element, attribs);
+    }
+
+    element.setAttribute('x1', x1.toString());
+    element.setAttribute('y1', y1.toString());
+    element.setAttribute('x2', x2.toString());
+    element.setAttribute('y2', y2.toString());
+    element.setAttribute('stroke', stroke_color);
+
+    return element;
+}
