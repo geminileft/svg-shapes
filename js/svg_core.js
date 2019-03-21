@@ -1,5 +1,15 @@
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
+function svg_el(el_name, attribs) {
+    var element = document.createElementNS(SVG_NS, el_name);
+
+    if (attribs !== undefined) {
+        attrib_set(element, attribs);
+    }
+
+    return element;
+}
+
 function gen_side_arc1c(height, sweep, negative) {
     const h = height.toString();
     const hh = (height / 2).toString();
@@ -18,71 +28,46 @@ function attrib_set(e, attribs) {
 }
 
 function svg_circle(cx, cy, r, attribs) {
-    var element = document.createElementNS(SVG_NS, 'circle');
+    const element = svg_el('circle', attribs);
     element.setAttribute('cx', cx);
     element.setAttribute('cy', cy);
     element.setAttribute('r', r);
-
-    if (attribs !== undefined) {
-        attrib_set(element, attribs);
-    }
 
     return element;
 }
 
 function svg_path(d, attribs) {
-    var element = document.createElementNS(SVG_NS, 'path');
+    const element = svg_el('path', attribs);
     element.setAttribute('d', d);
-
-    if (attribs !== undefined) {
-        attrib_set(element, attribs);
-    }
 
     return element;
 }
 
 function svg_group(attribs) {
-    var element = document.createElementNS(SVG_NS, 'g');
-
-    if (attribs !== undefined) {
-        attrib_set(element, attribs);
-    }
+    const element = svg_el('g', attribs);
 
     return element;
 }
 
 function svg_rect(x, y, w, h, attribs) {
-    var element = document.createElementNS(SVG_NS, 'rect');
+    const element = svg_el('rect', attribs);
     element.setAttribute('x', x);
     element.setAttribute('y', y);
     element.setAttribute('width', w);
     element.setAttribute('height', h);
 
-    if (attribs !== undefined) {
-        attrib_set(element, attribs);
-    }
-
     return element;
 }
 
 function svg_polygon(points, attribs) {
-    var element = document.createElementNS(SVG_NS, 'polygon');
+    const element = svg_el('polygon', attribs);
     element.setAttribute('points', points);
-
-    if (attribs !== undefined) {
-        attrib_set(element, attribs);
-    }
 
     return element;
 }
 
 function svg_line(x1, y1, x2, y2, stroke_color, attribs) {
-    var element = document.createElementNS(SVG_NS, 'line');
-
-    if (attribs !== undefined) {
-        attrib_set(element, attribs);
-    }
-
+    const element = svg_el('polygon', attribs);
     element.setAttribute('x1', x1.toString());
     element.setAttribute('y1', y1.toString());
     element.setAttribute('x2', x2.toString());
