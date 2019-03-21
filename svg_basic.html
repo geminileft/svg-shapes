@@ -14,22 +14,37 @@
  
 <script>
 
-    const x1 = 200;
-    const x2 = 500;
-    const x3 = 800;
+    const x1 = 150;
 
-    const y1 = 200;
-    const y2 = 450;
+    const x2 = 400;
+
+    const y1 = 100;
+    const y1_x_off = 200;
+
+    const y2 = 250;
+
+    const y3 = 370;
+    const y3_x_off = 150;
+
+    const y4 = 540;
 
     var svg = document.getElementById('my_svg');
 
     const diag = new DataFlowDiagram(svg);
-    diag.appendMulti(diag_server(x1, y1));
-    diag.appendMulti(diag_object_store(x2, y1));
-    diag.appendMulti(diag_file_store(x3, y1));
+    diag.appendMulti(diag_db(x1, y1));
+    diag.appendMulti(diag_object_store(x1 + y1_x_off, y1));
+    diag.appendMulti(diag_file_store(x1 + (2 * y1_x_off), y1));
+
     diag.appendMulti(diag_message_store(x1, y2));
-    diag.appendMulti(diag_gear(x2, y2));
-    diag.appendMulti(diag_transform(x3, y2));
+
+    diag.appendMulti(diag_gear(x1, y3));
+    diag.appendMulti(diag_transform(x1 + y3_x_off, y3));
+    
+    diag.appendMulti(diag_server(x1, y4));
+    diag.appendMulti(diag_flatfile(x1 + y1_x_off, y4));
+    diag.appendMulti(diag_report(x1 + (2 * y1_x_off), y4));
+    
+
     diag.render();
 
 </script>
