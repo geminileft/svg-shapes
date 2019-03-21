@@ -260,3 +260,24 @@ function diag_flatfile(x, y) {
     items.push(svg_circle(x, y, 5, {'fill':'red'}));
     return items;
 }
+
+function diag_report(x, y, width, height) {
+    const items = [];
+    const hw = width / 2;
+    const hh = height / 2;
+    const sc_off = 15;
+    const sc_base_w = 20; //width of the screen base
+
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(1.5, 1.5)';
+    const db_group = svg_group({'transform':tf_str});
+    items.push(db_group);
+
+    const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
+
+    db_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
+    db_group.appendChild(svg_line(0, sc_off + 5, 0, hh, 'black', {'stroke-width':'5'}))
+    db_group.appendChild(svg_line(-sc_base_w, hh, sc_base_w, hh, 'black', {'stroke-width':'5'}))
+
+    items.push(svg_circle(x, y, 5, {'fill':'red'}));
+    return items;
+}
