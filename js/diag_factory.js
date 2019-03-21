@@ -240,9 +240,19 @@ function diag_server(x, y) {
     const drive_y = -hh + y_start;
     const drive_width = width - (x_off * 2);
     const drive_height = height * drive_height_pctg;
-    const drive_attribs = {'rx':'2', 'ry':'2', 'fill':'gray'};
 
-    db_group.appendChild(svg_rect(- hw, -hh, width, height, {'rx':'5', 'ry':'5'}));
+    var drive_color = 'white';
+    var server_fill = 'black';
+
+    if (true) {
+        drive_color = 'black';
+        server_fill = 'none';
+    }
+
+    const drive_attribs = {'rx':'2', 'ry':'2', 'fill':drive_color};
+
+    const chassis_attr = {'rx':'5', 'ry':'5', 'stroke':'black', 'fill':server_fill, "stroke-width":5};
+    db_group.appendChild(svg_rect(- hw, -hh, width, height, chassis_attr));
     db_group.appendChild(svg_rect(drive_x, drive_y, drive_width, drive_height, drive_attribs));
     db_group.appendChild(svg_rect(drive_x, drive_y + drive_height + (height * drive_off_pctg), drive_width, drive_height, drive_attribs));
     db_group.appendChild(svg_rect(drive_x, drive_y + (2 * (drive_height + (height * drive_off_pctg))), drive_width, drive_height, drive_attribs));
