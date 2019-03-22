@@ -20,3 +20,18 @@ function point_on_circle_y(width, start_angle) {
     const circle_y = (width * -1 * Math.sin(toRadians(start_angle)));
     return circle_y;
 }
+
+function circle_points(width, start_angle, end_angle) {
+    const half_angle_delta = (end_angle - start_angle) / 2;
+
+    const start_x = point_on_circle_x(width, start_angle);
+    const start_y = point_on_circle_y(width, start_angle);
+
+    const arc_mid_x = point_on_circle_x(width, start_angle + half_angle_delta);
+    const arc_mid_y = point_on_circle_y(width, start_angle + half_angle_delta);
+
+    const end_x = point_on_circle_x(width, end_angle);
+    const end_y = point_on_circle_y(width, end_angle);
+
+    return [start_x, start_y, arc_mid_x, arc_mid_y, end_x, end_y];
+}

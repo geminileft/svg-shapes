@@ -166,14 +166,8 @@ function diag_transform(x, y) {
     const start_angle = -(90 - alpha_offset);
     const end_angle = 30 - alpha_offset;
 
-    const start_x = point_on_circle_x(width, start_angle);
-    const start_y = point_on_circle_y(width, start_angle);
-
-    const arc_mid_x = point_on_circle_x(width, -30);
-    const arc_mid_y = point_on_circle_y(width, -30);
-
-    const end_x = point_on_circle_x(width, end_angle);
-    const end_y = point_on_circle_y(width, end_angle);
+    const [start_x, start_y, arc_mid_x, arc_mid_y, end_x, end_y] =
+        circle_points(width, start_angle, end_angle);
 
     const mid_x = (end_x + start_x) / 2.0;
     const mid_y = (end_y + start_y) / 2.0;
@@ -186,7 +180,8 @@ function diag_transform(x, y) {
     const compare_x = mid_x + (mid_circle_vec[NORM_VEC_X_IDX] * seg_to_mid_length * stretch_factor);
     const compare_y = mid_y + (mid_circle_vec[NORM_VEC_Y_IDX] * seg_to_mid_length * stretch_factor);
 
-    var path_d = "M" + start_x + "," + start_y + " Q" + compare_x + "," + compare_y + " " + end_x + "," + end_y;
+    var path_d = quad_bez_path(start_x, start_y, compare_x, compare_y, end_x, end_y);
+
     transform_group.appendChild(svg_path(path_d));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)"}));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)"}));
@@ -317,6 +312,40 @@ function diag_report(x, y) {
 
     db_group.appendChild(svg_line(0, sc_off + 5, 0, hh, 'black', {'stroke-width':'5'}))
     db_group.appendChild(svg_line(-sc_base_w, hh, sc_base_w, hh, 'black', {'stroke-width':'5'}))
+
+    items.push(svg_circle(x, y, 5, {'fill':'red'}));
+    return items;
+}
+
+function diag_screen(x, y) {
+    const width = 150;
+    const height = 100;
+    const items = [];
+    const hw = width / 2;
+    const hh = height / 2;
+    const sc_off = 15;
+    const sc_base_w = 25; //width of the screen base
+
+    var tf_str = 'translate(' + x + ', ' + y + ')';
+    const db_group = svg_group({'transform':tf_str});
+    items.push(db_group);
+
+    const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
+
+    db_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
+
+    // db_group.appendChild(svg_line(0, sc_off + 5, 0, hh, 'black', {'stroke-width':'5'}))
+    // db_group.appendChild(svg_line(-sc_base_w, hh, sc_base_w, hh, 'black', {'stroke-width':'5', 'stroke-linecap':"round"}))
+
+    const b_neck_w = sc_base_w / 3.5; //base neck width
+
+    var path_d = quad_bez_path(-b_neck_w, sc_off + 5, -b_neck_w, hh, -sc_base_w, hh);
+    path_d = path_d + ' l' + (sc_base_w * 2).toString() + ',0'
+    path_d = path_d + ' Q' + b_neck_w + ',' + hh + ' ' + b_neck_w + ',' + (sc_off + 5).toString()
+    db_group.appendChild(svg_path(path_d, {'stroke-width':'5', 'stroke':'black', 'fill':'black', 'stroke-linecap':'round'}));
+
+    // path_d = quad_bez_path(b_neck_w, sc_off + 5, b_neck_w, hh, sc_base_w, hh);
+    // db_group.appendChild(svg_path(path_d, {'stroke-width':'5', 'stroke':'black', 'fill':'none', 'stroke-linecap':'round'}));
 
     items.push(svg_circle(x, y, 5, {'fill':'red'}));
     return items;
