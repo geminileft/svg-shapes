@@ -10,17 +10,6 @@ function svg_el(el_name, attribs) {
     return element;
 }
 
-function gen_side_arc1c(height, sweep, negative) {
-    const h = height.toString();
-    const hh = (height / 2).toString();
-
-    rv_neg = negative ? '-' : '';
-    sweep_flag = sweep ? '1' : '0';
-
-    const arc1 = 'a30,' + hh + ' 0 1,' + sweep_flag + ' 0,' + rv_neg + h;
-    return arc1;
-}
-
 function attrib_set(e, attribs) {
     for (var att in attribs) {
         e.setAttribute(att, attribs[att]);

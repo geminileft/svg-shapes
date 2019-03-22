@@ -334,18 +334,12 @@ function diag_screen(x, y) {
 
     db_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
 
-    // db_group.appendChild(svg_line(0, sc_off + 5, 0, hh, 'black', {'stroke-width':'5'}))
-    // db_group.appendChild(svg_line(-sc_base_w, hh, sc_base_w, hh, 'black', {'stroke-width':'5', 'stroke-linecap':"round"}))
-
     const b_neck_w = sc_base_w / 3.5; //base neck width
 
     var path_d = quad_bez_path(-b_neck_w, sc_off + 5, -b_neck_w, hh, -sc_base_w, hh);
     path_d = path_d + ' l' + (sc_base_w * 2).toString() + ',0'
     path_d = path_d + ' Q' + b_neck_w + ',' + hh + ' ' + b_neck_w + ',' + (sc_off + 5).toString()
     db_group.appendChild(svg_path(path_d, {'stroke-width':'5', 'stroke':'black', 'fill':'black', 'stroke-linecap':'round'}));
-
-    // path_d = quad_bez_path(b_neck_w, sc_off + 5, b_neck_w, hh, sc_base_w, hh);
-    // db_group.appendChild(svg_path(path_d, {'stroke-width':'5', 'stroke':'black', 'fill':'none', 'stroke-linecap':'round'}));
 
     items.push(svg_circle(x, y, 5, {'fill':'red'}));
     return items;

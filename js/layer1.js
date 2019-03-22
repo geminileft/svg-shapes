@@ -1,3 +1,14 @@
+function gen_side_arc1c(height, sweep, negative) {
+    const h = height.toString();
+    const hh = (height / 2).toString();
+
+    rv_neg = negative ? '-' : '';
+    sweep_flag = sweep ? '1' : '0';
+
+    const arc1 = 'a30,' + hh + ' 0 1,' + sweep_flag + ' 0,' + rv_neg + h;
+    return arc1;
+}
+
 function create_data_top(x, y, width, height) {
     const w = width.toString();
     const hw = (width / 2).toString();
