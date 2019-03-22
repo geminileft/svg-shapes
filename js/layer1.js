@@ -58,3 +58,8 @@ function create_side_band(x, y, width, height, slim, unit_size) {
 
     return svg_path(path_str);
 }
+
+function quad_bez_path(x1, y1, x2, y2, x3, y3) {
+    const path = "M" + x1 + "," + y1 + " Q" + x2 + "," + y2 + " " + x3 + "," + y3;
+    return path;
+}
