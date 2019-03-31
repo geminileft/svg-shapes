@@ -6,21 +6,14 @@ function DataFlowDiagram(svg_context) {
     this.children = [];
 }
 
-DataFlowDiagram.prototype.appendSingle = function(child) {
-    this.children.push(child);
+DataFlowDiagram.prototype.drawImmediateSingle = function(child) {
+    this.svg.appendChild(child);
 }
 
-DataFlowDiagram.prototype.appendMulti = function(children) {
+DataFlowDiagram.prototype.drawImmediateMulti = function(children) {
     for (var i = 0; i < children.length; i++) {
         var child = children[i];
-        this.appendSingle(child);
-    }
-}
-
-DataFlowDiagram.prototype.render = function() {
-    for(i = 0; i < this.children.length; i++) {
-        child = this.children[i];
-        this.svg.appendChild(child);
+        this.drawImmediateSingle(child);
     }
 }
 
