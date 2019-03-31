@@ -24,7 +24,7 @@ DataFlowDiagram.prototype.render = function() {
     }
 }
 
-function diag_db(x, y) {
+function diag_db(x, y, scale_factor) {
     const width = 150;
     const height = 100;
 
@@ -32,7 +32,8 @@ function diag_db(x, y) {
     const hw = width / 2;
     const hh = height / 2;
 
-    var tf_str = 'translate(' + x + ', ' + y + ')';
+    const s_factor = scale_factor || 1.0;
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
     const db_group = svg_group({'transform':tf_str});
     items.push(db_group);
 
@@ -43,7 +44,7 @@ function diag_db(x, y) {
     return items;
 }
 
-function diag_object_store(x, y) {
+function diag_object_store(x, y, scale_factor) {
     const width = 150;
     const height = 100;
 
@@ -51,7 +52,8 @@ function diag_object_store(x, y) {
     const hw = width / 2;
     const hh = height / 2;
 
-    var tf_str = 'translate(' + x + ', ' + y + ')';
+    const s_factor = scale_factor || 1.0;
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
     const object_store_group = svg_group({'transform':tf_str});
     items.push(object_store_group);
 
@@ -62,7 +64,7 @@ function diag_object_store(x, y) {
     return items;
 }
 
-function diag_file_store(x, y) {
+function diag_file_store(x, y, scale_factor) {
     const width = 150;
     const height = 100;
 
@@ -71,7 +73,8 @@ function diag_file_store(x, y) {
     const hw = width / 2;
     const y_off = (1.5 * tri_height) + 7;
 
-    var tf_str = 'translate(' + x + ', ' + y + ')';
+    const s_factor = scale_factor || 1.0;
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
     const file_store_group = svg_group({'transform':tf_str});
     items.push(file_store_group);
 
@@ -84,7 +87,7 @@ function diag_file_store(x, y) {
     return items;
 }
 
-function diag_message_store(x, y) {
+function diag_message_store(x, y, scale_factor) {
     const opts = new Map();
     opts.set('offset', 3);
     opts.set('bands', 4);
@@ -103,7 +106,8 @@ function diag_message_store(x, y) {
 
     const x_off = 2 * unit_width;
 
-    var tf_str = 'translate(' + x + ', ' + y + ')';
+    const s_factor = scale_factor || 1.0;
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
     const message_store_group = svg_group({'transform':tf_str});
     items.push(message_store_group);
 
@@ -118,10 +122,11 @@ function diag_message_store(x, y) {
     return items;
 }
 
-function diag_gear(x, y) {
+function diag_gear(x, y, scale_factor) {
     const items = [];
 
-    var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
+    const s_factor = scale_factor || 1.0;
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
     const gear_group = svg_group({'transform':tf_str, 'stroke-width':'1'});
     items.push(gear_group);
 
@@ -146,7 +151,7 @@ function diag_gear(x, y) {
     return items;
 }
 
-function diag_transform(x, y) {
+function diag_transform(x, y, scale_factor) {
     const width = 40;
     const items = [];
     const item_size = 3;
@@ -157,7 +162,8 @@ function diag_transform(x, y) {
     circle_attribs['stroke-width']="1";
     circle_attribs['fill']="none";
     
-    var tf_str = 'translate(' + x.toString() + ', ' + y.toString() + ')';
+    const s_factor = scale_factor || 1.0;
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
     const transform_group = svg_group({'transform':tf_str, 'stroke':'black', 'fill':'none', "stroke-width":line_width});
     items.push(transform_group);
 
@@ -214,7 +220,7 @@ function diag_transform(x, y) {
     return items;
 }
 
-function diag_server(x, y) {
+function diag_server(x, y, scale_factor) {
     const width = 100;
     const height = 150;
 
@@ -222,7 +228,8 @@ function diag_server(x, y) {
     const hw = width / 2;
     const hh = height / 2;
 
-    var tf_str = 'translate(' + x + ', ' + y + ')';
+    const s_factor = scale_factor || 1.0;
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
     const db_group = svg_group({'transform':tf_str});
     items.push(db_group);
 
@@ -256,10 +263,11 @@ function diag_server(x, y) {
     return items;
 }
 
-function diag_flatfile(x, y) {
+function diag_flatfile(x, y, scale_factor) {
     const items = [];
 
-    var tf_str = 'translate(' + x + ', ' + y + ')';
+    const s_factor = scale_factor || 1.0;
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
 
     var fill_color = 'none';
 
@@ -293,7 +301,7 @@ function diag_flatfile(x, y) {
     return items;
 }
 
-function diag_report(x, y) {
+function diag_report(x, y, scale_factor) {
     const width = 150;
     const height = 100;
     const items = [];
@@ -302,7 +310,8 @@ function diag_report(x, y) {
     const sc_off = 15;
     const sc_base_w = 20; //width of the screen base
 
-    var tf_str = 'translate(' + x + ', ' + y + ')';
+    const s_factor = scale_factor || 1.0;
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
     const db_group = svg_group({'transform':tf_str});
     items.push(db_group);
 
@@ -317,7 +326,7 @@ function diag_report(x, y) {
     return items;
 }
 
-function diag_screen(x, y) {
+function diag_screen(x, y, scale_factor) {
     const width = 150;
     const height = 100;
     const items = [];
@@ -326,7 +335,8 @@ function diag_screen(x, y) {
     const sc_off = 15;
     const sc_base_w = 25; //width of the screen base
 
-    var tf_str = 'translate(' + x + ', ' + y + ')';
+    const s_factor = scale_factor || 1.0;
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
     const db_group = svg_group({'transform':tf_str});
     items.push(db_group);
 
