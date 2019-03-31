@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <script type="text/javascript" src="./js/math_core.js"></script>
+            <script type="text/javascript" src="./js/svg_core.js"></script>
+            <script type="text/javascript" src="./js/layer1.js"></script>
+            <script type="text/javascript" src="./js/diag_factory.js"></script>
+    </head>
+<body>
+<div>
+    <select id="draw_item">
+        <option value='database'>Database</option>
+        <option value='object_store'>Object Store</option>
+        <option value='file_store'>File Store</option>
+        <option value='message_store'>Message Store</option>
+        <option value='gear'>Gear</option>
+        <option value='transform'>Transform</option>
+        <option value='server'>Server</option>
+        <option value='flat_file'>Flat File</option>
+        <option value='report'>Report</option>
+        <option value='screen'>Screen</option>
+    </select>
+</div>
+<svg id="my_svg" width="2000" height="1000" style="border-style:solid">
+    Sorry, your browser does not support inline SVG.
+</svg>
+ 
+<script>
+
+function svg_mouse_down(e) {
+    const tgt = e.currentTarget;
+    const boundingRect = tgt.getBoundingClientRect();
+	const xPosition = e.clientX - boundingRect.left - 3;
+    const yPosition = e.clientY - boundingRect.top - 4;
+
+    const draw_item_opts = document.getElementById("draw_item").options;
+    const idx = draw_item_opts.selectedIndex;
+    const opt = draw_item_opts[idx].value;
+
+    var item;
+
+    if (opt == 'database') {
+        item = diag_db(xPosition, yPosition);
+    } else if (opt == 'object_store') {
+        item = diag_object_store(xPosition, yPosition);
+    } else if (opt == 'file_store') {
+        item = diag_file_store(xPosition, yPosition);
+    } else if (opt == 'message_store') {
+        item = diag_message_store(xPosition, yPosition);
+    } else if (opt == 'gear') {
+        item = diag_gear(xPosition, yPosition);
+    } else if (opt == 'transform') {
+        item = diag_transform(xPosition, yPosition);
+    } else if (opt == 'server') {
+        item = diag_server(xPosition, yPosition);
+    } else if (opt == 'flat_file') {
+        item = diag_flatfile(xPosition, yPosition);
+    } else if (opt == 'report') {
+        item = diag_report(xPosition, yPosition);
+    } else if (opt == 'screen') {
+        item = diag_screen(xPosition, yPosition);
+    }
+
+    diag.drawImmediateMulti(item);
+}
+
+var svg = document.getElementById('my_svg');
+
+svg.addEventListener("mousedown", svg_mouse_down, false);
+
+const diag = new DataFlowDiagram(svg);
+
+</script>
+</body>
+</html>
