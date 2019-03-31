@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <script type="text/javascript" src="./js/math_core.js"></script>
+            <script type="text/javascript" src="./js/svg_core.js"></script>
+            <script type="text/javascript" src="./js/layer1.js"></script>
+            <script type="text/javascript" src="./js/diag_factory.js"></script>
+    </head>
+<body>
+
+<svg id="my_svg" width="2000" height="1000" style="border-style:solid">
+    Sorry, your browser does not support inline SVG.
+</svg>
+ 
+<script>
+
+function svg_mouse_down(e) {
+    const tgt = e.currentTarget;
+    const boundingRect = tgt.getBoundingClientRect();
+	const xPosition = e.clientX - boundingRect.left - 3;
+    const yPosition = e.clientY - boundingRect.top - 4;
+    diag.drawImmediateMulti(diag_db(xPosition, yPosition));
+
+}
+
+var svg = document.getElementById('my_svg');
+svg.addEventListener("mousedown", svg_mouse_down, false);
+
+const diag = new DataFlowDiagram(svg);
+
+</script>
+</body>
+</html>
