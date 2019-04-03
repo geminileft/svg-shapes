@@ -7,7 +7,7 @@
             <script type="text/javascript" src="./js/diag_factory.js"></script>
     </head>
 <body>
-<div>
+<div>Item:
     <select id="draw_item">
         <option value='database'>Database</option>
         <option value='object_store'>Object Store</option>
@@ -19,7 +19,10 @@
         <option value='flat_file'>Flat File</option>
         <option value='report'>Report</option>
         <option value='screen'>Screen</option>
-    </select>
+    </select><br />
+    Size: <input id="draw_size" type="text" value="1" /><br />
+    Mode: INSERT
+
 </div>
 <svg id="my_svg" width="2000" height="1000" style="border-style:solid">
     Sorry, your browser does not support inline SVG.
@@ -37,31 +40,39 @@ function svg_mouse_down(e) {
     const idx = draw_item_opts.selectedIndex;
     const opt = draw_item_opts[idx].value;
 
+
+    const size = document.getElementById("draw_size").value;
+    const sz_int = parseFloat(size);
+
     var item;
-
+    var item_fn = null;
+    
     if (opt == 'database') {
-        item = diag_db(xPosition, yPosition);
+        item_fn = diag_db;
     } else if (opt == 'object_store') {
-        item = diag_object_store(xPosition, yPosition);
+        item_fn = diag_object_store;
     } else if (opt == 'file_store') {
-        item = diag_file_store(xPosition, yPosition);
+        item_fn = diag_file_store;
     } else if (opt == 'message_store') {
-        item = diag_message_store(xPosition, yPosition);
+        item_fn = diag_message_store;
     } else if (opt == 'gear') {
-        item = diag_gear(xPosition, yPosition);
+        item_fn = diag_gear;
     } else if (opt == 'transform') {
-        item = diag_transform(xPosition, yPosition);
+        item_fn = diag_transform;
     } else if (opt == 'server') {
-        item = diag_server(xPosition, yPosition);
+        item_fn = diag_server;
     } else if (opt == 'flat_file') {
-        item = diag_flatfile(xPosition, yPosition);
+        item_fn = diag_flatfile;
     } else if (opt == 'report') {
-        item = diag_report(xPosition, yPosition);
+        item_fn = diag_report;
     } else if (opt == 'screen') {
-        item = diag_screen(xPosition, yPosition);
+        item_fn = diag_screen;
     }
-
-    diag.drawImmediateMulti(item);
+    
+    if (item_fn != null) {
+        item = item_fn(xPosition, yPosition, sz_int);
+        diag.drawImmediateMulti(item);
+    }
 }
 
 var svg = document.getElementById('my_svg');
