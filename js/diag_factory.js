@@ -406,6 +406,14 @@ function diag_report(x, y, scale_factor) {
 function diag_screen(x, y, scale_factor) {
     const width = 150;
     const height = 100;
+
+    const box_width_scale = 1.05;
+    const box_height_scale = 1.4;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -419,6 +427,7 @@ function diag_screen(x, y, scale_factor) {
 
     const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
 
+    db_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     db_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
 
     const b_neck_w = sc_base_w / 3.5; //base neck width
