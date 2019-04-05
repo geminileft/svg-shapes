@@ -115,6 +115,13 @@ function diag_message_store(x, y, scale_factor) {
     const width = 150;
     const height = 70;
 
+    const box_width_scale = 1.6;
+    const box_height_scale = 1;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
     const tri_width = width / 3;
     const hh = height / 2;
@@ -131,6 +138,7 @@ function diag_message_store(x, y, scale_factor) {
     const message_store_group = svg_group({'transform':tf_str});
     items.push(message_store_group);
 
+    message_store_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     message_store_group.appendChild(create_side_cover(0 + x_off, 0 - hh, height, opts));
 
     for (var i = 0;i < bands; ++i) {
