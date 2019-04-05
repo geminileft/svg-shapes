@@ -192,6 +192,15 @@ function diag_gear(x, y, scale_factor) {
 
 function diag_transform(x, y, scale_factor) {
     const width = 40;
+    const height = 100;
+
+    const box_width_scale = 2.5;
+    const box_height_scale = 1.1;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
     const item_size = 3;
     const line_width = (item_size * 4).toString();
@@ -227,6 +236,7 @@ function diag_transform(x, y, scale_factor) {
 
     var path_d = quad_bez_path(start_x, start_y, compare_x, compare_y, end_x, end_y);
 
+    transform_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     transform_group.appendChild(svg_path(path_d, {'fill':'none', "stroke-width":line_width}));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)", 'fill':'none', "stroke-width":line_width}));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)", 'fill':'none', "stroke-width":line_width}));
