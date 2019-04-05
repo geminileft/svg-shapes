@@ -265,7 +265,7 @@ function diag_flatfile(x, y, scale_factor) {
         fill_color = 'black'
     }
     
-    const item_group = svg_group({'transform':tf_str, 'fill':fill_color, 'stroke':'black', 'stroke-width':'5'});
+    const item_group = svg_group({'transform':tf_str, 'fill':fill_color});
     items.push(item_group);
 
     const x_scale = 8.5;
@@ -287,7 +287,7 @@ function diag_flatfile(x, y, scale_factor) {
     const poly_pts = lx + ", " + ty + " " + nrx + ", " + ty + " " + rx + ", " + qy + " " + rx + ", " + by + " " + lx + ", " + by;
     item_group.appendChild(svg_polygon(poly_pts));
 
-    items.push(svg_circle(x, y, 5, {'fill':'red'}));
+    item_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
     return items;
 }
 
