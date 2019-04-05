@@ -273,6 +273,13 @@ function diag_server(x, y, scale_factor) {
     const width = 100;
     const height = 150;
 
+    const box_width_scale = 1.1;
+    const box_height_scale = 1.1;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -303,6 +310,7 @@ function diag_server(x, y, scale_factor) {
     const drive_attribs = {'rx':'2', 'ry':'2', 'fill':drive_color};
 
     const chassis_attr = {'rx':'5', 'ry':'5', 'stroke':'black', 'fill':server_fill, "stroke-width":5};
+    db_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     db_group.appendChild(svg_rect(- hw, -hh, width, height, chassis_attr));
     db_group.appendChild(svg_rect(drive_x, drive_y, drive_width, drive_height, drive_attribs));
     db_group.appendChild(svg_rect(drive_x, drive_y + drive_height + (height * drive_off_pctg), drive_width, drive_height, drive_attribs));
