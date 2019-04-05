@@ -321,6 +321,16 @@ function diag_server(x, y, scale_factor) {
 }
 
 function diag_flatfile(x, y, scale_factor) {
+    const width = 100;
+    const height = 150;
+
+    const box_width_scale = 1.1;
+    const box_height_scale = .9;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
 
     const s_factor = scale_factor || 1.0;
@@ -351,6 +361,7 @@ function diag_flatfile(x, y, scale_factor) {
     const ty = (-y_scale * sc).toString();
     const by = (y_scale * sc).toString();
 
+    item_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     const poly_pts = lx + ", " + ty + " " + nrx + ", " + ty + " " + rx + ", " + qy + " " + rx + ", " + by + " " + lx + ", " + by;
     item_group.appendChild(svg_polygon(poly_pts));
 
