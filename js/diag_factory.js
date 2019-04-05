@@ -21,6 +21,13 @@ function diag_db(x, y, scale_factor) {
     const width = 150;
     const height = 100;
 
+    const box_width_scale = 1;
+    const box_height_scale = 1.5;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -28,8 +35,15 @@ function diag_db(x, y, scale_factor) {
     const s_factor = scale_factor || 1.0;
     var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
     const db_group = svg_group({'transform':tf_str});
+
+    const my_fn = function(e) {
+        alert('ok');
+        e.stopPropagation();
+    }
+    db_group.addEventListener("mousedown", my_fn, false);
     items.push(db_group);
 
+    db_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     db_group.appendChild(create_data_top(- hw, -hh, width, height));
     db_group.appendChild(create_flexible_band(- hw, -hh, width, height, 0));
     db_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
@@ -40,6 +54,13 @@ function diag_object_store(x, y, scale_factor) {
     const width = 150;
     const height = 100;
 
+    const box_width_scale = 1;
+    const box_height_scale = 1.5;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -49,6 +70,7 @@ function diag_object_store(x, y, scale_factor) {
     const object_store_group = svg_group({'transform':tf_str});
     items.push(object_store_group);
 
+    object_store_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     object_store_group.appendChild(create_data_top(- hw, - hh, width, height));
     object_store_group.appendChild(create_flexible_band(- hw, - hh, width, height, 25));
     object_store_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
@@ -58,6 +80,13 @@ function diag_object_store(x, y, scale_factor) {
 function diag_file_store(x, y, scale_factor) {
     const width = 150;
     const height = 100;
+
+    const box_width_scale = 1;
+    const box_height_scale = 1.6;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
 
     const items = [];
     const tri_height = height / 3;
@@ -69,6 +98,7 @@ function diag_file_store(x, y, scale_factor) {
     const file_store_group = svg_group({'transform':tf_str});
     items.push(file_store_group);
 
+    file_store_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     file_store_group.appendChild(create_data_top(- hw, - y_off, width, height));
     file_store_group.appendChild(create_flexible_band(- hw, - y_off, width, tri_height, 0));
     file_store_group.appendChild(create_flexible_band(- hw, tri_height + 5 - y_off, width, tri_height, 0));
@@ -84,6 +114,13 @@ function diag_message_store(x, y, scale_factor) {
     
     const width = 150;
     const height = 70;
+
+    const box_width_scale = 1.6;
+    const box_height_scale = 1;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
 
     const items = [];
     const tri_width = width / 3;
@@ -101,6 +138,7 @@ function diag_message_store(x, y, scale_factor) {
     const message_store_group = svg_group({'transform':tf_str});
     items.push(message_store_group);
 
+    message_store_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     message_store_group.appendChild(create_side_cover(0 + x_off, 0 - hh, height, opts));
 
     for (var i = 0;i < bands; ++i) {
@@ -113,6 +151,16 @@ function diag_message_store(x, y, scale_factor) {
 }
 
 function diag_gear(x, y, scale_factor) {
+    const width = 150;
+    const height = 100;
+
+    const box_width_scale = .75;
+    const box_height_scale = 1.1;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
 
     const s_factor = scale_factor || 1.0;
@@ -125,6 +173,7 @@ function diag_gear(x, y, scale_factor) {
     circle_attribs['stroke-width']="10";
     circle_attribs['fill']="none";
 
+    gear_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     gear_group.appendChild(svg_circle(0, 0, 40, circle_attribs));
     
     var path_d = "m0,-43 l-10,0 l3,-10 l14,0 l3,10 z";
@@ -143,6 +192,15 @@ function diag_gear(x, y, scale_factor) {
 
 function diag_transform(x, y, scale_factor) {
     const width = 40;
+    const height = 100;
+
+    const box_width_scale = 2.5;
+    const box_height_scale = 1.1;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
     const item_size = 3;
     const line_width = (item_size * 4).toString();
@@ -178,6 +236,7 @@ function diag_transform(x, y, scale_factor) {
 
     var path_d = quad_bez_path(start_x, start_y, compare_x, compare_y, end_x, end_y);
 
+    transform_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     transform_group.appendChild(svg_path(path_d, {'fill':'none', "stroke-width":line_width}));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)", 'fill':'none', "stroke-width":line_width}));
     transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)", 'fill':'none', "stroke-width":line_width}));
@@ -214,6 +273,13 @@ function diag_server(x, y, scale_factor) {
     const width = 100;
     const height = 150;
 
+    const box_width_scale = 1.1;
+    const box_height_scale = 1.1;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -244,6 +310,7 @@ function diag_server(x, y, scale_factor) {
     const drive_attribs = {'rx':'2', 'ry':'2', 'fill':drive_color};
 
     const chassis_attr = {'rx':'5', 'ry':'5', 'stroke':'black', 'fill':server_fill, "stroke-width":5};
+    db_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     db_group.appendChild(svg_rect(- hw, -hh, width, height, chassis_attr));
     db_group.appendChild(svg_rect(drive_x, drive_y, drive_width, drive_height, drive_attribs));
     db_group.appendChild(svg_rect(drive_x, drive_y + drive_height + (height * drive_off_pctg), drive_width, drive_height, drive_attribs));
@@ -254,6 +321,16 @@ function diag_server(x, y, scale_factor) {
 }
 
 function diag_flatfile(x, y, scale_factor) {
+    const width = 100;
+    const height = 150;
+
+    const box_width_scale = 1.1;
+    const box_height_scale = .9;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
 
     const s_factor = scale_factor || 1.0;
@@ -284,6 +361,7 @@ function diag_flatfile(x, y, scale_factor) {
     const ty = (-y_scale * sc).toString();
     const by = (y_scale * sc).toString();
 
+    item_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     const poly_pts = lx + ", " + ty + " " + nrx + ", " + ty + " " + rx + ", " + qy + " " + rx + ", " + by + " " + lx + ", " + by;
     item_group.appendChild(svg_polygon(poly_pts));
 
@@ -294,6 +372,14 @@ function diag_flatfile(x, y, scale_factor) {
 function diag_report(x, y, scale_factor) {
     const width = 150;
     const height = 100;
+
+    const box_width_scale = 1.05;
+    const box_height_scale = 1.4;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -307,6 +393,7 @@ function diag_report(x, y, scale_factor) {
 
     const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
 
+    db_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     db_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
 
     db_group.appendChild(svg_line(0, sc_off + 5, 0, hh, 'black', {'stroke-width':'5'}))
@@ -319,6 +406,14 @@ function diag_report(x, y, scale_factor) {
 function diag_screen(x, y, scale_factor) {
     const width = 150;
     const height = 100;
+
+    const box_width_scale = 1.05;
+    const box_height_scale = 1.4;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -332,6 +427,7 @@ function diag_screen(x, y, scale_factor) {
 
     const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
 
+    db_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     db_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
 
     const b_neck_w = sc_base_w / 3.5; //base neck width
