@@ -21,6 +21,13 @@ function diag_db(x, y, scale_factor) {
     const width = 150;
     const height = 100;
 
+    const box_width_scale = 1;
+    const box_height_scale = 1.5;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -28,8 +35,15 @@ function diag_db(x, y, scale_factor) {
     const s_factor = scale_factor || 1.0;
     var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
     const db_group = svg_group({'transform':tf_str});
+
+    const my_fn = function(e) {
+        alert('ok');
+        e.stopPropagation();
+    }
+    db_group.addEventListener("mousedown", my_fn, false);
     items.push(db_group);
 
+    db_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     db_group.appendChild(create_data_top(- hw, -hh, width, height));
     db_group.appendChild(create_flexible_band(- hw, -hh, width, height, 0));
     db_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
