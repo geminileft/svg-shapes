@@ -151,6 +151,16 @@ function diag_message_store(x, y, scale_factor) {
 }
 
 function diag_gear(x, y, scale_factor) {
+    const width = 150;
+    const height = 100;
+
+    const box_width_scale = .75;
+    const box_height_scale = 1.1;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
 
     const s_factor = scale_factor || 1.0;
@@ -163,6 +173,7 @@ function diag_gear(x, y, scale_factor) {
     circle_attribs['stroke-width']="10";
     circle_attribs['fill']="none";
 
+    gear_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     gear_group.appendChild(svg_circle(0, 0, 40, circle_attribs));
     
     var path_d = "m0,-43 l-10,0 l3,-10 l14,0 l3,10 z";
