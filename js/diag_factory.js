@@ -54,6 +54,13 @@ function diag_object_store(x, y, scale_factor) {
     const width = 150;
     const height = 100;
 
+    const box_width_scale = 1;
+    const box_height_scale = 1.5;
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
     const items = [];
     const hw = width / 2;
     const hh = height / 2;
@@ -63,6 +70,7 @@ function diag_object_store(x, y, scale_factor) {
     const object_store_group = svg_group({'transform':tf_str});
     items.push(object_store_group);
 
+    object_store_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     object_store_group.appendChild(create_data_top(- hw, - hh, width, height));
     object_store_group.appendChild(create_flexible_band(- hw, - hh, width, height, 25));
     object_store_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
