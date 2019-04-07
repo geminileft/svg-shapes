@@ -1,14 +1,23 @@
 const NORM_VEC_X_IDX = 2;
 const NORM_VEC_Y_IDX = 3;
+
 const DIAG_TYPE_ATTR = 'data-diag-type';
+const DIAG_INT_MODE_ATTR = 'data-diag-int-mode';
+
+const DIAG_INTERACTIVE_NONE = 0;
+const DIAG_INTERACTIVE_MOVE = 1;
+
 
 function DataFlowDiagram(svg_context) {
     this.svg = svg_context;
     this.children = [];
+    this.interactiveMode = DIAG_INTERACTIVE_NONE;
 }
 
 DataFlowDiagram.prototype.drawImmediateSingle = function(child) {
     this.svg.appendChild(child);
+    child.setAttribute(DIAG_INT_MODE_ATTR, this.interactiveMode);
+    this.children.push(child);
 }
 
 DataFlowDiagram.prototype.drawImmediateMulti = function(children) {
@@ -18,11 +27,20 @@ DataFlowDiagram.prototype.drawImmediateMulti = function(children) {
     }
 }
 
+DataFlowDiagram.prototype.setInteractiveMode = function(mode) {
+    this.interactiveMode = mode;
+    for (var child in this.children) {
+        child.setAttribute(DIAG_INT_MODE_ATTR, this.interactiveMode);
+    }
+}
+
 function diag_click_handler(e) {
     const el = this;
-    const me_txt = el.getAttribute(DIAG_TYPE_ATTR);
-    alert('Click Handler: ' + me_txt);;
-    e.stopPropagation();
+    if (el.getAttribute(DIAG_INT_MODE_ATTR) == DIAG_INTERACTIVE_MOVE) {
+        const me_txt = el.getAttribute(DIAG_TYPE_ATTR);
+        alert('Click Handler: ' + me_txt);;
+        e.stopPropagation();    
+    }
 }
 
 function diag_db(x, y, scale_factor) {
