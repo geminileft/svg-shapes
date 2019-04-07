@@ -1,19 +1,45 @@
 const NORM_VEC_X_IDX = 2;
 const NORM_VEC_Y_IDX = 3;
 
+const DIAG_TYPE_ATTR = 'data-diag-type';
+const DIAG_INT_MODE_ATTR = 'data-diag-int-mode';
+
+const DIAG_INTERACTIVE_NONE = 0;
+const DIAG_INTERACTIVE_MOVE = 1;
+
+
 function DataFlowDiagram(svg_context) {
     this.svg = svg_context;
     this.children = [];
+    this.interactiveMode = DIAG_INTERACTIVE_NONE;
 }
 
 DataFlowDiagram.prototype.drawImmediateSingle = function(child) {
     this.svg.appendChild(child);
+    child.setAttribute(DIAG_INT_MODE_ATTR, this.interactiveMode);
+    this.children.push(child);
 }
 
 DataFlowDiagram.prototype.drawImmediateMulti = function(children) {
     for (var i = 0; i < children.length; i++) {
         var child = children[i];
         this.drawImmediateSingle(child);
+    }
+}
+
+DataFlowDiagram.prototype.setInteractiveMode = function(mode) {
+    this.interactiveMode = mode;
+    for (var child in this.children) {
+        child.setAttribute(DIAG_INT_MODE_ATTR, this.interactiveMode);
+    }
+}
+
+function diag_click_handler(e) {
+    const el = this;
+    if (el.getAttribute(DIAG_INT_MODE_ATTR) == DIAG_INTERACTIVE_MOVE) {
+        const me_txt = el.getAttribute(DIAG_TYPE_ATTR);
+        alert('Click Handler: ' + me_txt);;
+        e.stopPropagation();    
     }
 }
 
@@ -34,19 +60,15 @@ function diag_db(x, y, scale_factor) {
 
     const s_factor = scale_factor || 1.0;
     var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const db_group = svg_group({'transform':tf_str});
+    const diag_group = svg_group({'transform':tf_str});
+    diag_group.setAttribute(DIAG_TYPE_ATTR, 'database');
+    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    items.push(diag_group);
 
-    const my_fn = function(e) {
-        alert('ok');
-        e.stopPropagation();
-    }
-    db_group.addEventListener("mousedown", my_fn, false);
-    items.push(db_group);
-
-    db_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
-    db_group.appendChild(create_data_top(- hw, -hh, width, height));
-    db_group.appendChild(create_flexible_band(- hw, -hh, width, height, 0));
-    db_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(create_data_top(- hw, -hh, width, height));
+    diag_group.appendChild(create_flexible_band(- hw, -hh, width, height, 0));
+    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
     return items;
 }
 
@@ -67,13 +89,15 @@ function diag_object_store(x, y, scale_factor) {
 
     const s_factor = scale_factor || 1.0;
     var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const object_store_group = svg_group({'transform':tf_str});
-    items.push(object_store_group);
+    const diag_group = svg_group({'transform':tf_str});
+    diag_group.setAttribute(DIAG_TYPE_ATTR, 'object_store');
+    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    items.push(diag_group);
 
-    object_store_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
-    object_store_group.appendChild(create_data_top(- hw, - hh, width, height));
-    object_store_group.appendChild(create_flexible_band(- hw, - hh, width, height, 25));
-    object_store_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(create_data_top(- hw, - hh, width, height));
+    diag_group.appendChild(create_flexible_band(- hw, - hh, width, height, 25));
+    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
     return items;
 }
 
@@ -95,15 +119,17 @@ function diag_file_store(x, y, scale_factor) {
 
     const s_factor = scale_factor || 1.0;
     var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const file_store_group = svg_group({'transform':tf_str});
-    items.push(file_store_group);
+    const diag_group = svg_group({'transform':tf_str});
+    diag_group.setAttribute(DIAG_TYPE_ATTR, 'file_store');
+    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    items.push(diag_group);
 
-    file_store_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
-    file_store_group.appendChild(create_data_top(- hw, - y_off, width, height));
-    file_store_group.appendChild(create_flexible_band(- hw, - y_off, width, tri_height, 0));
-    file_store_group.appendChild(create_flexible_band(- hw, tri_height + 5 - y_off, width, tri_height, 0));
-    file_store_group.appendChild(create_flexible_band(- hw, (2 * tri_height) + 10 - y_off, width, tri_height, 0));
-    file_store_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(create_data_top(- hw, - y_off, width, height));
+    diag_group.appendChild(create_flexible_band(- hw, - y_off, width, tri_height, 0));
+    diag_group.appendChild(create_flexible_band(- hw, tri_height + 5 - y_off, width, tri_height, 0));
+    diag_group.appendChild(create_flexible_band(- hw, (2 * tri_height) + 10 - y_off, width, tri_height, 0));
+    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
     return items;
 }
 
@@ -135,17 +161,19 @@ function diag_message_store(x, y, scale_factor) {
 
     const s_factor = scale_factor || 1.0;
     var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const message_store_group = svg_group({'transform':tf_str});
-    items.push(message_store_group);
+    const diag_group = svg_group({'transform':tf_str});
+    diag_group.setAttribute(DIAG_TYPE_ATTR, 'message_store');
+    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    items.push(diag_group);
 
-    message_store_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
-    message_store_group.appendChild(create_side_cover(0 + x_off, 0 - hh, height, opts));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(create_side_cover(0 + x_off, 0 - hh, height, opts));
 
     for (var i = 0;i < bands; ++i) {
-        message_store_group.appendChild(create_side_band((x_off - unit_width * i) + (4 * i) + (i * adj_w), -hh, width, height, 0, unit_width));
+        diag_group.appendChild(create_side_band((x_off - unit_width * i) + (4 * i) + (i * adj_w), -hh, width, height, 0, unit_width));
     }
 
-    message_store_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
+    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
 
     return items;
 }
@@ -165,27 +193,29 @@ function diag_gear(x, y, scale_factor) {
 
     const s_factor = scale_factor || 1.0;
     var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const gear_group = svg_group({'transform':tf_str, 'stroke-width':'1'});
-    items.push(gear_group);
+    const diag_group = svg_group({'transform':tf_str, 'stroke-width':'1'});
+    diag_group.setAttribute(DIAG_TYPE_ATTR, 'gear');
+    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    items.push(diag_group);
 
     const circle_attribs = {};
     circle_attribs['stroke']="black";
     circle_attribs['stroke-width']="10";
     circle_attribs['fill']="none";
 
-    gear_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
-    gear_group.appendChild(svg_circle(0, 0, 40, circle_attribs));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(svg_circle(0, 0, 40, circle_attribs));
     
     var path_d = "m0,-43 l-10,0 l3,-10 l14,0 l3,10 z";
-    gear_group.appendChild(svg_path(path_d));
+    diag_group.appendChild(svg_path(path_d));
 
     for (var i = 1;i < 8; ++i) {
         const angle_in_deg = 45 * i;
         tf_str = 'rotate(' + angle_in_deg.toString() + ', 0, 0)';
-        gear_group.appendChild(svg_path(path_d, {'transform':tf_str}));
+        diag_group.appendChild(svg_path(path_d, {'transform':tf_str}));
     }
 
-    gear_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
+    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
 
     return items;
 }
@@ -212,8 +242,10 @@ function diag_transform(x, y, scale_factor) {
     
     const s_factor = scale_factor || 1.0;
     var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const transform_group = svg_group({'transform':tf_str, 'stroke':'black'});
-    items.push(transform_group);
+    const diag_group = svg_group({'transform':tf_str, 'stroke':'black'});
+    diag_group.setAttribute(DIAG_TYPE_ATTR, 'transform');
+    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    items.push(diag_group);
 
     const alpha_offset = 12;
 
@@ -236,10 +268,10 @@ function diag_transform(x, y, scale_factor) {
 
     var path_d = quad_bez_path(start_x, start_y, compare_x, compare_y, end_x, end_y);
 
-    transform_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
-    transform_group.appendChild(svg_path(path_d, {'fill':'none', "stroke-width":line_width}));
-    transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)", 'fill':'none', "stroke-width":line_width}));
-    transform_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)", 'fill':'none', "stroke-width":line_width}));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(svg_path(path_d, {'fill':'none', "stroke-width":line_width}));
+    diag_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)", 'fill':'none', "stroke-width":line_width}));
+    diag_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)", 'fill':'none', "stroke-width":line_width}));
 
     const tri_scale = 2.7 * item_size;
 
@@ -257,15 +289,15 @@ function diag_transform(x, y, scale_factor) {
     const size_sf_str = (item_size * 1.3).toString();
 
     path_d = "M " + tri_x_l + "," + tri_y_l + " L" + tri_x_r + "," + tri_y_r + " L" + point_x + "," + point_y + " z";
-    transform_group.appendChild(svg_path(path_d, {"stroke-width": size_sf_str, 'fill':'black'}));
+    diag_group.appendChild(svg_path(path_d, {"stroke-width": size_sf_str, 'fill':'black'}));
     
     path_d = "M " + tri_x_l + "," + tri_y_l + " L" + tri_x_r + "," + tri_y_r + " L" + point_x + "," + point_y + " z";
-    transform_group.appendChild(svg_path(path_d, {"stroke-width": size_sf_str, 'fill':'black', 'transform':"rotate(-120, 0, 0)"}));
+    diag_group.appendChild(svg_path(path_d, {"stroke-width": size_sf_str, 'fill':'black', 'transform':"rotate(-120, 0, 0)"}));
     
     path_d = "M " + tri_x_l + "," + tri_y_l + " L" + tri_x_r + "," + tri_y_r + " L" + point_x + "," + point_y + " z";
-    transform_group.appendChild(svg_path(path_d, {"stroke-width": size_sf_str, 'fill':'black', 'transform':"rotate(-240, 0, 0)"}));
+    diag_group.appendChild(svg_path(path_d, {"stroke-width": size_sf_str, 'fill':'black', 'transform':"rotate(-240, 0, 0)"}));
 
-    transform_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
+    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
     return items;
 }
 
@@ -286,8 +318,10 @@ function diag_server(x, y, scale_factor) {
 
     const s_factor = scale_factor || 1.0;
     var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const db_group = svg_group({'transform':tf_str});
-    items.push(db_group);
+    const diag_group = svg_group({'transform':tf_str});
+    diag_group.setAttribute(DIAG_TYPE_ATTR, 'server');
+    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    items.push(diag_group);
 
     const x_off = 11;
     const y_start = 13;
@@ -310,13 +344,13 @@ function diag_server(x, y, scale_factor) {
     const drive_attribs = {'rx':'2', 'ry':'2', 'fill':drive_color};
 
     const chassis_attr = {'rx':'5', 'ry':'5', 'stroke':'black', 'fill':server_fill, "stroke-width":5};
-    db_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
-    db_group.appendChild(svg_rect(- hw, -hh, width, height, chassis_attr));
-    db_group.appendChild(svg_rect(drive_x, drive_y, drive_width, drive_height, drive_attribs));
-    db_group.appendChild(svg_rect(drive_x, drive_y + drive_height + (height * drive_off_pctg), drive_width, drive_height, drive_attribs));
-    db_group.appendChild(svg_rect(drive_x, drive_y + (2 * (drive_height + (height * drive_off_pctg))), drive_width, drive_height, drive_attribs));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(svg_rect(- hw, -hh, width, height, chassis_attr));
+    diag_group.appendChild(svg_rect(drive_x, drive_y, drive_width, drive_height, drive_attribs));
+    diag_group.appendChild(svg_rect(drive_x, drive_y + drive_height + (height * drive_off_pctg), drive_width, drive_height, drive_attribs));
+    diag_group.appendChild(svg_rect(drive_x, drive_y + (2 * (drive_height + (height * drive_off_pctg))), drive_width, drive_height, drive_attribs));
 
-    db_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
+    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
     return items;
 }
 
@@ -342,8 +376,10 @@ function diag_flatfile(x, y, scale_factor) {
         fill_color = 'black'
     }
     
-    const item_group = svg_group({'transform':tf_str, 'fill':fill_color});
-    items.push(item_group);
+    const diag_group = svg_group({'transform':tf_str, 'fill':fill_color});
+    diag_group.setAttribute(DIAG_TYPE_ATTR, 'flatfile');
+    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    items.push(diag_group);
 
     const x_scale = 8.5;
     const y_scale = 11;
@@ -361,11 +397,11 @@ function diag_flatfile(x, y, scale_factor) {
     const ty = (-y_scale * sc).toString();
     const by = (y_scale * sc).toString();
 
-    item_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     const poly_pts = lx + ", " + ty + " " + nrx + ", " + ty + " " + rx + ", " + qy + " " + rx + ", " + by + " " + lx + ", " + by;
-    item_group.appendChild(svg_polygon(poly_pts));
+    diag_group.appendChild(svg_polygon(poly_pts));
 
-    item_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
+    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
     return items;
 }
 
@@ -388,18 +424,20 @@ function diag_report(x, y, scale_factor) {
 
     const s_factor = scale_factor || 1.0;
     var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const db_group = svg_group({'transform':tf_str});
-    items.push(db_group);
+    const diag_group = svg_group({'transform':tf_str});
+    diag_group.setAttribute(DIAG_TYPE_ATTR, 'report');
+    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    items.push(diag_group);
 
     const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
 
-    db_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
-    db_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
 
-    db_group.appendChild(svg_line(0, sc_off + 5, 0, hh, 'black', {'stroke-width':'5'}))
-    db_group.appendChild(svg_line(-sc_base_w, hh, sc_base_w, hh, 'black', {'stroke-width':'5'}))
+    diag_group.appendChild(svg_line(0, sc_off + 5, 0, hh, 'black', {'stroke-width':'5'}))
+    diag_group.appendChild(svg_line(-sc_base_w, hh, sc_base_w, hh, 'black', {'stroke-width':'5'}))
 
-    db_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
+    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
     return items;
 }
 
@@ -422,21 +460,23 @@ function diag_screen(x, y, scale_factor) {
 
     const s_factor = scale_factor || 1.0;
     var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const db_group = svg_group({'transform':tf_str});
-    items.push(db_group);
+    const diag_group = svg_group({'transform':tf_str});
+    diag_group.setAttribute(DIAG_TYPE_ATTR, 'screen');
+    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    items.push(diag_group);
 
     const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
 
-    db_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
-    db_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
 
     const b_neck_w = sc_base_w / 3.5; //base neck width
 
     var path_d = quad_bez_path(-b_neck_w, sc_off + 5, -b_neck_w, hh, -sc_base_w, hh);
     path_d = path_d + ' l' + (sc_base_w * 2).toString() + ',0'
     path_d = path_d + ' Q' + b_neck_w + ',' + hh + ' ' + b_neck_w + ',' + (sc_off + 5).toString()
-    db_group.appendChild(svg_path(path_d, {'stroke-width':'5', 'stroke':'black', 'fill':'black', 'stroke-linecap':'round'}));
+    diag_group.appendChild(svg_path(path_d, {'stroke-width':'5', 'stroke':'black', 'fill':'black', 'stroke-linecap':'round'}));
 
-    db_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
+    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
     return items;
 }
