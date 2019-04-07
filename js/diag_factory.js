@@ -3,10 +3,12 @@ const NORM_VEC_Y_IDX = 3;
 
 const DIAG_TYPE_ATTR = 'data-diag-type';
 const DIAG_INT_MODE_ATTR = 'data-diag-int-mode';
+const DIAG_SHOW_BOUNDS = 'data-diag-show-bounds';
 
 const DIAG_INTERACTIVE_NONE = 0;
 const DIAG_INTERACTIVE_MOVE = 1;
 
+const DIAG_ITEM_BG_RECT = {'fill':'green', 'stroke-width':'3', 'stroke':'red'};
 
 function DataFlowDiagram(svg_context) {
     this.svg = svg_context;
@@ -15,8 +17,16 @@ function DataFlowDiagram(svg_context) {
 }
 
 DataFlowDiagram.prototype.drawImmediateSingle = function(child) {
-    this.svg.appendChild(child);
     child.setAttribute(DIAG_INT_MODE_ATTR, this.interactiveMode);
+    if (this.interactiveMode) {
+        for (var i = 0;i < child.childNodes.length; ++i) {
+            var cn = child.childNodes[i];
+            if (cn.hasAttribute(DIAG_SHOW_BOUNDS)) {
+                cn.style.visibility = 'visible';
+            }
+        }
+    }
+    this.svg.appendChild(child);
     this.children.push(child);
 }
 
@@ -43,29 +53,54 @@ function diag_click_handler(e) {
     }
 }
 
+function core_diag_grouping(tf_str, diag_type, bounds_rect) {
+    const diag_group = svg_group({'transform':tf_str});
+    diag_group.setAttribute(DIAG_TYPE_ATTR, diag_type);
+    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    bounds_rect.setAttribute(DIAG_SHOW_BOUNDS, false);
+    bounds_rect.style.visibility = 'hidden';
+    diag_group.appendChild(bounds_rect);
+    return diag_group;
+}
+
+function core_diag_grouping2(x, y, scale_factor, diag_type
+    , width, height, box_width_scale, box_height_scale) {
+
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
+    const bounds_rect = svg_rect(- hbw, -hbh, box_w, box_h, DIAG_ITEM_BG_RECT);
+    
+    const s_factor = scale_factor || 1.0;
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
+    const diag_group = svg_group({'transform':tf_str});
+    diag_group.setAttribute(DIAG_TYPE_ATTR, diag_type);
+    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    bounds_rect.setAttribute(DIAG_SHOW_BOUNDS, false);
+    bounds_rect.style.visibility = 'hidden';
+    diag_group.appendChild(bounds_rect);
+    return diag_group;
+}
+
 function diag_db(x, y, scale_factor) {
+    const items = [];
+
     const width = 150;
     const height = 100;
 
     const box_width_scale = 1;
     const box_height_scale = 1.5;
-    const box_w = width * box_width_scale;
-    const box_h = height * box_height_scale;
-    const hbw = box_w / 2;
-    const hbh = box_h / 2;
 
-    const items = [];
+    const diag_type = 'database';
+    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    items.push(diag_group);
+
     const hw = width / 2;
     const hh = height / 2;
 
-    const s_factor = scale_factor || 1.0;
-    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const diag_group = svg_group({'transform':tf_str});
-    diag_group.setAttribute(DIAG_TYPE_ATTR, 'database');
-    diag_group.addEventListener("mousedown", diag_click_handler, false);
-    items.push(diag_group);
-
-    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     diag_group.appendChild(create_data_top(- hw, -hh, width, height));
     diag_group.appendChild(create_flexible_band(- hw, -hh, width, height, 0));
     diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
@@ -73,28 +108,21 @@ function diag_db(x, y, scale_factor) {
 }
 
 function diag_object_store(x, y, scale_factor) {
+    const items = [];
+
     const width = 150;
     const height = 100;
 
     const box_width_scale = 1;
     const box_height_scale = 1.5;
-    const box_w = width * box_width_scale;
-    const box_h = height * box_height_scale;
-    const hbw = box_w / 2;
-    const hbh = box_h / 2;
+    
+    const diag_type = 'object_store';
+    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    items.push(diag_group);
 
-    const items = [];
     const hw = width / 2;
     const hh = height / 2;
 
-    const s_factor = scale_factor || 1.0;
-    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const diag_group = svg_group({'transform':tf_str});
-    diag_group.setAttribute(DIAG_TYPE_ATTR, 'object_store');
-    diag_group.addEventListener("mousedown", diag_click_handler, false);
-    items.push(diag_group);
-
-    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     diag_group.appendChild(create_data_top(- hw, - hh, width, height));
     diag_group.appendChild(create_flexible_band(- hw, - hh, width, height, 25));
     diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
@@ -102,29 +130,22 @@ function diag_object_store(x, y, scale_factor) {
 }
 
 function diag_file_store(x, y, scale_factor) {
+    const items = [];
+
     const width = 150;
     const height = 100;
 
     const box_width_scale = 1;
     const box_height_scale = 1.6;
-    const box_w = width * box_width_scale;
-    const box_h = height * box_height_scale;
-    const hbw = box_w / 2;
-    const hbh = box_h / 2;
 
-    const items = [];
+    const diag_type = 'file_store';
+    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    items.push(diag_group);
+
     const tri_height = height / 3;
     const hw = width / 2;
     const y_off = (1.5 * tri_height) + 7;
 
-    const s_factor = scale_factor || 1.0;
-    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const diag_group = svg_group({'transform':tf_str});
-    diag_group.setAttribute(DIAG_TYPE_ATTR, 'file_store');
-    diag_group.addEventListener("mousedown", diag_click_handler, false);
-    items.push(diag_group);
-
-    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
     diag_group.appendChild(create_data_top(- hw, - y_off, width, height));
     diag_group.appendChild(create_flexible_band(- hw, - y_off, width, tri_height, 0));
     diag_group.appendChild(create_flexible_band(- hw, tri_height + 5 - y_off, width, tri_height, 0));
@@ -166,7 +187,7 @@ function diag_message_store(x, y, scale_factor) {
     diag_group.addEventListener("mousedown", diag_click_handler, false);
     items.push(diag_group);
 
-    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, DIAG_ITEM_BG_RECT));
     diag_group.appendChild(create_side_cover(0 + x_off, 0 - hh, height, opts));
 
     for (var i = 0;i < bands; ++i) {
@@ -203,7 +224,7 @@ function diag_gear(x, y, scale_factor) {
     circle_attribs['stroke-width']="10";
     circle_attribs['fill']="none";
 
-    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, DIAG_ITEM_BG_RECT));
     diag_group.appendChild(svg_circle(0, 0, 40, circle_attribs));
     
     var path_d = "m0,-43 l-10,0 l3,-10 l14,0 l3,10 z";
@@ -268,7 +289,7 @@ function diag_transform(x, y, scale_factor) {
 
     var path_d = quad_bez_path(start_x, start_y, compare_x, compare_y, end_x, end_y);
 
-    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, DIAG_ITEM_BG_RECT));
     diag_group.appendChild(svg_path(path_d, {'fill':'none', "stroke-width":line_width}));
     diag_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)", 'fill':'none', "stroke-width":line_width}));
     diag_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)", 'fill':'none', "stroke-width":line_width}));
@@ -344,7 +365,7 @@ function diag_server(x, y, scale_factor) {
     const drive_attribs = {'rx':'2', 'ry':'2', 'fill':drive_color};
 
     const chassis_attr = {'rx':'5', 'ry':'5', 'stroke':'black', 'fill':server_fill, "stroke-width":5};
-    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, DIAG_ITEM_BG_RECT));
     diag_group.appendChild(svg_rect(- hw, -hh, width, height, chassis_attr));
     diag_group.appendChild(svg_rect(drive_x, drive_y, drive_width, drive_height, drive_attribs));
     diag_group.appendChild(svg_rect(drive_x, drive_y + drive_height + (height * drive_off_pctg), drive_width, drive_height, drive_attribs));
@@ -397,7 +418,7 @@ function diag_flatfile(x, y, scale_factor) {
     const ty = (-y_scale * sc).toString();
     const by = (y_scale * sc).toString();
 
-    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, DIAG_ITEM_BG_RECT));
     const poly_pts = lx + ", " + ty + " " + nrx + ", " + ty + " " + rx + ", " + qy + " " + rx + ", " + by + " " + lx + ", " + by;
     diag_group.appendChild(svg_polygon(poly_pts));
 
@@ -431,7 +452,7 @@ function diag_report(x, y, scale_factor) {
 
     const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
 
-    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, DIAG_ITEM_BG_RECT));
     diag_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
 
     diag_group.appendChild(svg_line(0, sc_off + 5, 0, hh, 'black', {'stroke-width':'5'}))
@@ -467,7 +488,7 @@ function diag_screen(x, y, scale_factor) {
 
     const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
 
-    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, {'fill':'none', 'stroke-width':'3', 'stroke':'green'}));
+    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, DIAG_ITEM_BG_RECT));
     diag_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
 
     const b_neck_w = sc_base_w / 3.5; //base neck width
