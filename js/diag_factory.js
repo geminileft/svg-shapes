@@ -291,26 +291,20 @@ function diag_transform(x, y, scale_factor) {
 }
 
 function diag_server(x, y, scale_factor) {
+    const items = [];
+
     const width = 100;
     const height = 150;
 
     const box_width_scale = 1.1;
     const box_height_scale = 1.1;
-    const box_w = width * box_width_scale;
-    const box_h = height * box_height_scale;
-    const hbw = box_w / 2;
-    const hbh = box_h / 2;
 
-    const items = [];
+    const diag_type = 'server';
+    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    items.push(diag_group);
+
     const hw = width / 2;
     const hh = height / 2;
-
-    const s_factor = scale_factor || 1.0;
-    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const diag_group = svg_group({'transform':tf_str});
-    diag_group.setAttribute(DIAG_TYPE_ATTR, 'server');
-    diag_group.addEventListener("mousedown", diag_click_handler, false);
-    items.push(diag_group);
 
     const x_off = 11;
     const y_start = 13;
@@ -333,7 +327,6 @@ function diag_server(x, y, scale_factor) {
     const drive_attribs = {'rx':'2', 'ry':'2', 'fill':drive_color};
 
     const chassis_attr = {'rx':'5', 'ry':'5', 'stroke':'black', 'fill':server_fill, "stroke-width":5};
-    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, DIAG_ITEM_BG_RECT));
     diag_group.appendChild(svg_rect(- hw, -hh, width, height, chassis_attr));
     diag_group.appendChild(svg_rect(drive_x, drive_y, drive_width, drive_height, drive_attribs));
     diag_group.appendChild(svg_rect(drive_x, drive_y + drive_height + (height * drive_off_pctg), drive_width, drive_height, drive_attribs));
