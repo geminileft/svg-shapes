@@ -337,30 +337,16 @@ function diag_server(x, y, scale_factor) {
 }
 
 function diag_flatfile(x, y, scale_factor) {
+    const items = [];
+
     const width = 100;
     const height = 150;
 
     const box_width_scale = 1.1;
     const box_height_scale = .9;
-    const box_w = width * box_width_scale;
-    const box_h = height * box_height_scale;
-    const hbw = box_w / 2;
-    const hbh = box_h / 2;
 
-    const items = [];
-
-    const s_factor = scale_factor || 1.0;
-    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-
-    var fill_color = 'none';
-
-    if (true) {
-        fill_color = 'black'
-    }
-    
-    const diag_group = svg_group({'transform':tf_str, 'fill':fill_color});
-    diag_group.setAttribute(DIAG_TYPE_ATTR, 'flatfile');
-    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    const diag_type = 'flatfile';
+    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const x_scale = 8.5;
@@ -378,8 +364,7 @@ function diag_flatfile(x, y, scale_factor) {
 
     const ty = (-y_scale * sc).toString();
     const by = (y_scale * sc).toString();
-
-    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, DIAG_ITEM_BG_RECT));
+    
     const poly_pts = lx + ", " + ty + " " + nrx + ", " + ty + " " + rx + ", " + qy + " " + rx + ", " + by + " " + lx + ", " + by;
     diag_group.appendChild(svg_polygon(poly_pts));
 
