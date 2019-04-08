@@ -373,32 +373,25 @@ function diag_flatfile(x, y, scale_factor) {
 }
 
 function diag_report(x, y, scale_factor) {
+    const items = [];
+
     const width = 150;
     const height = 100;
 
     const box_width_scale = 1.05;
     const box_height_scale = 1.4;
-    const box_w = width * box_width_scale;
-    const box_h = height * box_height_scale;
-    const hbw = box_w / 2;
-    const hbh = box_h / 2;
 
-    const items = [];
+    const diag_type = 'report';
+    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    items.push(diag_group);
+
+    const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
+
     const hw = width / 2;
     const hh = height / 2;
     const sc_off = 15;
     const sc_base_w = 20; //width of the screen base
 
-    const s_factor = scale_factor || 1.0;
-    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const diag_group = svg_group({'transform':tf_str});
-    diag_group.setAttribute(DIAG_TYPE_ATTR, 'report');
-    diag_group.addEventListener("mousedown", diag_click_handler, false);
-    items.push(diag_group);
-
-    const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
-
-    diag_group.appendChild(svg_rect(- hbw, -hbh, box_w, box_h, DIAG_ITEM_BG_RECT));
     diag_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
 
     diag_group.appendChild(svg_line(0, sc_off + 5, 0, hh, 'black', {'stroke-width':'5'}))
