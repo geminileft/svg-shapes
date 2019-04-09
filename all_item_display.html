@@ -31,7 +31,7 @@
     var svg = document.getElementById('my_svg');
 
     const diag = new DataFlowDiagram(svg);
-    diag.drawImmediateMulti(diag_db(x1, y1));
+    diag.drawImmediateMulti(diag.diag_db(x1, y1));
     diag.drawImmediateMulti(diag_object_store(x1 + y1_x_off, y1));
     diag.drawImmediateMulti(diag_file_store(x1 + (2 * y1_x_off), y1));
 

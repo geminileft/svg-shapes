@@ -257,28 +257,6 @@ DataFlowDiagram.prototype.diag_db = function(x, y, scale_factor) {
     return items;
 }
 
-function diag_db(x, y, scale_factor) {
-    const items = [];
-
-    const width = 150;
-    const height = 100;
-
-    const box_width_scale = 1;
-    const box_height_scale = 1.5;
-
-    const diag_type = 'database';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
-    items.push(diag_group);
-
-    const hw = width / 2;
-    const hh = height / 2;
-
-    diag_group.appendChild(create_data_top(- hw, -hh, width, height));
-    diag_group.appendChild(create_flexible_band(- hw, -hh, width, height, 0));
-    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
-    return items;
-}
-
 function diag_object_store(x, y, scale_factor) {
     const items = [];
 
