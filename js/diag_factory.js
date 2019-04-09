@@ -10,6 +10,21 @@ const DIAG_INTERACTIVE_MOVE = 1;
 
 const DIAG_ITEM_BG_RECT = {'fill':'green', 'stroke-width':'3', 'stroke':'red'};
 
+const TRANSFORM_TRANSLATE_SCALE_VAL = 1;
+const TRANSFORM_TRANSLATE_VAL = 2;
+const TRANSFORM_SCALE_VAL = 3;
+
+var active_item = null;
+var elementX;
+var elementY;
+var elementScaleX;
+var elementScaleY;
+
+var initialX;
+var initialY;
+var xOffset = 0;
+var yOffset = 0;
+
 function DataFlowDiagram(svg_context) {
     this.svg = svg_context;
     this.children = [];
@@ -44,17 +59,79 @@ DataFlowDiagram.prototype.setInteractiveMode = function(mode) {
     }
 }
 
-function diag_click_handler(e) {
+function diag_mousedown_handler(e) {
     const el = this;
     if (el.getAttribute(DIAG_INT_MODE_ATTR) == DIAG_INTERACTIVE_MOVE) {
-        const me_txt = el.getAttribute(DIAG_TYPE_ATTR);
-        alert('Click Handler: ' + me_txt);;
+        initialX = e.offsetX;
+        initialY = e.offsetY;
+        const dbstr = 'initial x: ' + initialX.toString() + ' y: ' + initialY.toString()
+        active_item = el;
+        const bv = active_item.transform.baseVal;
+        for (var i = 0;i < bv.length; ++i) {
+            var tf = bv[i];
+            if (tf.type == TRANSFORM_TRANSLATE_VAL) {
+                elementX = tf.matrix.e;
+                elementY = tf.matrix.f;
+            }
+            else if (tf.type == TRANSFORM_SCALE_VAL) {
+                elementScaleX = tf.matrix.a;
+                elementScaleY = tf.matrix.d;
+            }
+            else if (tf.type == TRANSFORM_TRANSLATE_SCALE_VAL) {
+                elementX = tf.matrix.e;
+                elementY = tf.matrix.f;
+                elementScaleX = tf.matrix.a;
+                elementScaleY = tf.matrix.d;
+
+            }
+        }
         e.stopPropagation();    
     }
 }
 
-function core_diag_grouping2(x, y, scale_factor, diag_type
-    , width, height, box_width_scale, box_height_scale) {
+function diag_mouseup_handler(e) {
+    const el = this;
+    if (el.getAttribute(DIAG_INT_MODE_ATTR) == DIAG_INTERACTIVE_MOVE) {
+        const finalX = e.offsetX;
+        const finalY = e.offsetY;
+
+        if (active_item != null) {
+            const dbstr = 'final x: ' + finalX.toString() + ' y: ' + finalY.toString()
+            const me_txt = el.getAttribute(DIAG_TYPE_ATTR);
+        }
+        active_item = null;
+        e.stopPropagation();
+    }
+}
+
+function diag_mousemove_handler(e) {
+    const el = this;
+    if (el.getAttribute(DIAG_INT_MODE_ATTR) == DIAG_INTERACTIVE_MOVE) {
+        if (active_item != null) {
+            const currentX = e.offsetX;
+            const currentY = e.offsetY;
+            const deltaX = currentX - initialX;
+            const deltaY = currentY - initialY;
+            const nX = (elementX + deltaX).toString();
+            const nY = (elementY + deltaY).toString();
+            const dbstr = 'move x: ' + nX.toString() + ' y: ' + nY.toString()
+            // console.log(dbstr);
+            el.setAttribute('transform', 'translate(' + nX + ', ' + nY + ')')
+            const bv = active_item.transform.baseVal;
+            for (var i = 0;i < bv.length; ++i) {
+                var tf = bv[i];
+                if (tf.type == TRANSFORM_TRANSLATE_VAL) {
+                    tf.matrix.e = elementX + deltaX;
+                    tf.matrix.f = elementY + deltaY;
+                    break;
+                }
+            }
+                e.stopPropagation();
+        }
+    }
+}
+
+function core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale) {
 
     const box_w = width * box_width_scale;
     const box_h = height * box_height_scale;
@@ -68,7 +145,9 @@ function core_diag_grouping2(x, y, scale_factor, diag_type
     var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
     const diag_group = svg_group({'transform':tf_str});
     diag_group.setAttribute(DIAG_TYPE_ATTR, diag_type);
-    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    diag_group.addEventListener("mousedown", diag_mousedown_handler, false);
+    diag_group.addEventListener("mouseup", diag_mouseup_handler, false);
+    diag_group.addEventListener("mousemove", diag_mousemove_handler, false);
     bounds_rect.setAttribute(DIAG_SHOW_BOUNDS, false);
     bounds_rect.style.visibility = 'hidden';
     diag_group.appendChild(bounds_rect);
