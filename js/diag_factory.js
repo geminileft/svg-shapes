@@ -117,36 +117,6 @@ DataFlowDiagram.prototype.setInteractiveMode = function(mode) {
     }
 }
 
-function diag_mousedown_handler(e) {
-    const el = this;
-    if (el.getAttribute(DIAG_INT_MODE_ATTR) == DIAG_INTERACTIVE_MOVE) {
-        initialX = e.offsetX;
-        initialY = e.offsetY;
-        const dbstr = 'initial x: ' + initialX.toString() + ' y: ' + initialY.toString()
-        active_item = el;
-        const bv = active_item.transform.baseVal;
-        for (var i = 0;i < bv.length; ++i) {
-            var tf = bv[i];
-            if (tf.type == TRANSFORM_TRANSLATE_VAL) {
-                elementX = tf.matrix.e;
-                elementY = tf.matrix.f;
-            }
-            else if (tf.type == TRANSFORM_SCALE_VAL) {
-                elementScaleX = tf.matrix.a;
-                elementScaleY = tf.matrix.d;
-            }
-            else if (tf.type == TRANSFORM_TRANSLATE_SCALE_VAL) {
-                elementX = tf.matrix.e;
-                elementY = tf.matrix.f;
-                elementScaleX = tf.matrix.a;
-                elementScaleY = tf.matrix.d;
-
-            }
-        }
-        e.stopPropagation();    
-    }
-}
-
 function diag_mouseup_handler(e) {
     const el = this;
     if (el.getAttribute(DIAG_INT_MODE_ATTR) == DIAG_INTERACTIVE_MOVE) {
@@ -159,33 +129,6 @@ function diag_mouseup_handler(e) {
         }
         active_item = null;
         e.stopPropagation();
-    }
-}
-
-function diag_mousemove_handler(e) {
-    const el = this;
-    if (el.getAttribute(DIAG_INT_MODE_ATTR) == DIAG_INTERACTIVE_MOVE) {
-        if (active_item != null) {
-            const currentX = e.offsetX;
-            const currentY = e.offsetY;
-            const deltaX = currentX - initialX;
-            const deltaY = currentY - initialY;
-            const nX = (elementX + deltaX).toString();
-            const nY = (elementY + deltaY).toString();
-            const dbstr = 'move x: ' + nX.toString() + ' y: ' + nY.toString()
-            // console.log(dbstr);
-            el.setAttribute('transform', 'translate(' + nX + ', ' + nY + ')')
-            const bv = active_item.transform.baseVal;
-            for (var i = 0;i < bv.length; ++i) {
-                var tf = bv[i];
-                if (tf.type == TRANSFORM_TRANSLATE_VAL) {
-                    tf.matrix.e = elementX + deltaX;
-                    tf.matrix.f = elementY + deltaY;
-                    break;
-                }
-            }
-                e.stopPropagation();
-        }
     }
 }
 
