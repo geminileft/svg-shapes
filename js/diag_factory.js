@@ -257,7 +257,7 @@ DataFlowDiagram.prototype.diag_db = function(x, y, scale_factor) {
     return items;
 }
 
-function diag_object_store(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_object_store = function(x, y, scale_factor) {
     const items = [];
 
     const width = 150;
@@ -267,7 +267,7 @@ function diag_object_store(x, y, scale_factor) {
     const box_height_scale = 1.5;
     
     const diag_type = 'object_store';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const hw = width / 2;

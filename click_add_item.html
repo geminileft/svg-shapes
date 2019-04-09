@@ -50,7 +50,7 @@ function svg_mouse_down(e) {
     if (opt == 'database') {
         item = diag.diag_db(xPosition, yPosition, sz_int);
     } else if (opt == 'object_store') {
-        item_fn = diag_object_store;
+        item = diag.diag_object_store(xPosition, yPosition, sz_int);
     } else if (opt == 'file_store') {
         item_fn = diag_file_store;
     } else if (opt == 'message_store') {
