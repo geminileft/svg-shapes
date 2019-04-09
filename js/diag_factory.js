@@ -189,29 +189,6 @@ function diag_mousemove_handler(e) {
     }
 }
 
-function core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale) {
-
-    const box_w = width * box_width_scale;
-    const box_h = height * box_height_scale;
-
-    const hbw = box_w / 2;
-    const hbh = box_h / 2;
-
-    const bounds_rect = svg_rect(- hbw, -hbh, box_w, box_h, DIAG_ITEM_BG_RECT);
-    
-    const s_factor = scale_factor || 1.0;
-    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
-    const diag_group = svg_group({'transform':tf_str});
-    diag_group.setAttribute(DIAG_TYPE_ATTR, diag_type);
-    diag_group.addEventListener("mousedown", diag_mousedown_handler, false);
-    diag_group.addEventListener("mouseup", diag_mouseup_handler, false);
-    diag_group.addEventListener("mousemove", diag_mousemove_handler, false);
-    bounds_rect.setAttribute(DIAG_SHOW_BOUNDS, false);
-    bounds_rect.style.visibility = 'hidden';
-    diag_group.appendChild(bounds_rect);
-    return diag_group;
-}
-
 DataFlowDiagram.prototype.core_group = function(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale) {
 
     const box_w = width * box_width_scale;
