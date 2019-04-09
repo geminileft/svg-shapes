@@ -60,9 +60,9 @@ function svg_mouse_down(e) {
     } else if (opt == 'transform') {
         item = diag.diag_transform(xPosition, yPosition, sz_int);
     } else if (opt == 'server') {
-        item_fn = diag_server;
+        item = diag.diag_server(xPosition, yPosition, sz_int);
     } else if (opt == 'flat_file') {
-        item_fn = diag_flatfile;
+        item = diag.diag_flatfile(xPosition, yPosition, sz_int);
     } else if (opt == 'report') {
         item_fn = diag_report;
     } else if (opt == 'screen') {

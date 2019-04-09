@@ -450,7 +450,7 @@ DataFlowDiagram.prototype.diag_transform = function(x, y, scale_factor) {
     return items;
 }
 
-function diag_server(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_server = function(x, y, scale_factor) {
     const items = [];
 
     const width = 100;
@@ -460,7 +460,7 @@ function diag_server(x, y, scale_factor) {
     const box_height_scale = 1.1;
 
     const diag_type = 'server';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const hw = width / 2;
@@ -496,7 +496,7 @@ function diag_server(x, y, scale_factor) {
     return items;
 }
 
-function diag_flatfile(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_flatfile = function(x, y, scale_factor) {
     const items = [];
 
     const width = 100;
@@ -506,7 +506,7 @@ function diag_flatfile(x, y, scale_factor) {
     const box_height_scale = .9;
 
     const diag_type = 'flatfile';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const x_scale = 8.5;
