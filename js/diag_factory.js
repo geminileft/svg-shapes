@@ -10,10 +10,83 @@ const DIAG_INTERACTIVE_MOVE = 1;
 
 const DIAG_ITEM_BG_RECT = {'fill':'green', 'stroke-width':'3', 'stroke':'red'};
 
+const TRANSFORM_TRANSLATE_SCALE_VAL = 1;
+const TRANSFORM_TRANSLATE_VAL = 2;
+const TRANSFORM_SCALE_VAL = 3;
+
+var active_item = null;
+var elementX;
+var elementY;
+var elementScaleX;
+var elementScaleY;
+
+var initialX;
+var initialY;
+var xOffset = 0;
+var yOffset = 0;
+
 function DataFlowDiagram(svg_context) {
     this.svg = svg_context;
+    this.svg.addEventListener("mousemove", this, false);
     this.children = [];
     this.interactiveMode = DIAG_INTERACTIVE_NONE;
+}
+
+DataFlowDiagram.prototype.handleEvent = function(e) {
+    if (e.type == 'mousedown') {
+        const el = e.currentTarget;
+        if (el.getAttribute(DIAG_INT_MODE_ATTR) == DIAG_INTERACTIVE_MOVE) {
+            initialX = e.offsetX;
+            initialY = e.offsetY;
+            const dbstr = 'initial x: ' + initialX.toString() + ' y: ' + initialY.toString()
+            active_item = el;
+            const bv = active_item.transform.baseVal;
+            for (var i = 0;i < bv.length; ++i) {
+                var tf = bv[i];
+                if (tf.type == TRANSFORM_TRANSLATE_VAL) {
+                    elementX = tf.matrix.e;
+                    elementY = tf.matrix.f;
+                }
+                else if (tf.type == TRANSFORM_SCALE_VAL) {
+                    elementScaleX = tf.matrix.a;
+                    elementScaleY = tf.matrix.d;
+                }
+                else if (tf.type == TRANSFORM_TRANSLATE_SCALE_VAL) {
+                    elementX = tf.matrix.e;
+                    elementY = tf.matrix.f;
+                    elementScaleX = tf.matrix.a;
+                    elementScaleY = tf.matrix.d;
+
+                }
+            }
+            e.stopPropagation();    
+        }
+    } else if (e.type == 'mousemove') {
+        if (active_item != null) {
+            const el = active_item;
+            if (el.getAttribute(DIAG_INT_MODE_ATTR) == DIAG_INTERACTIVE_MOVE) {
+                const currentX = e.offsetX;
+                const currentY = e.offsetY;
+                const deltaX = currentX - initialX;
+                const deltaY = currentY - initialY;
+                const nX = (elementX + deltaX).toString();
+                const nY = (elementY + deltaY).toString();
+                const dbstr = 'move x: ' + nX.toString() + ' y: ' + nY.toString()
+                // console.log(dbstr);
+                el.setAttribute('transform', 'translate(' + nX + ', ' + nY + ')')
+                const bv = active_item.transform.baseVal;
+                for (var i = 0;i < bv.length; ++i) {
+                    var tf = bv[i];
+                    if (tf.type == TRANSFORM_TRANSLATE_VAL) {
+                        tf.matrix.e = elementX + deltaX;
+                        tf.matrix.f = elementY + deltaY;
+                        break;
+                    }
+                }
+                    e.stopPropagation();
+            }
+        }    
+    }
 }
 
 DataFlowDiagram.prototype.drawImmediateSingle = function(child) {
@@ -44,17 +117,22 @@ DataFlowDiagram.prototype.setInteractiveMode = function(mode) {
     }
 }
 
-function diag_click_handler(e) {
+function diag_mouseup_handler(e) {
     const el = this;
     if (el.getAttribute(DIAG_INT_MODE_ATTR) == DIAG_INTERACTIVE_MOVE) {
-        const me_txt = el.getAttribute(DIAG_TYPE_ATTR);
-        alert('Click Handler: ' + me_txt);;
-        e.stopPropagation();    
+        const finalX = e.offsetX;
+        const finalY = e.offsetY;
+
+        if (active_item != null) {
+            const dbstr = 'final x: ' + finalX.toString() + ' y: ' + finalY.toString()
+            const me_txt = el.getAttribute(DIAG_TYPE_ATTR);
+        }
+        active_item = null;
+        e.stopPropagation();
     }
 }
 
-function core_diag_grouping2(x, y, scale_factor, diag_type
-    , width, height, box_width_scale, box_height_scale) {
+DataFlowDiagram.prototype.core_group = function(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale) {
 
     const box_w = width * box_width_scale;
     const box_h = height * box_height_scale;
@@ -68,14 +146,16 @@ function core_diag_grouping2(x, y, scale_factor, diag_type
     var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
     const diag_group = svg_group({'transform':tf_str});
     diag_group.setAttribute(DIAG_TYPE_ATTR, diag_type);
-    diag_group.addEventListener("mousedown", diag_click_handler, false);
+    diag_group.addEventListener("mousedown", this, false);
+    diag_group.addEventListener("mouseup", diag_mouseup_handler, false);
+    diag_group.addEventListener("mousemove", this, false);
     bounds_rect.setAttribute(DIAG_SHOW_BOUNDS, false);
     bounds_rect.style.visibility = 'hidden';
     diag_group.appendChild(bounds_rect);
     return diag_group;
 }
 
-function diag_db(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_db = function(x, y, scale_factor) {
     const items = [];
 
     const width = 150;
@@ -85,7 +165,7 @@ function diag_db(x, y, scale_factor) {
     const box_height_scale = 1.5;
 
     const diag_type = 'database';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const hw = width / 2;
@@ -97,7 +177,7 @@ function diag_db(x, y, scale_factor) {
     return items;
 }
 
-function diag_object_store(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_object_store = function(x, y, scale_factor) {
     const items = [];
 
     const width = 150;
@@ -107,7 +187,7 @@ function diag_object_store(x, y, scale_factor) {
     const box_height_scale = 1.5;
     
     const diag_type = 'object_store';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const hw = width / 2;
@@ -119,7 +199,7 @@ function diag_object_store(x, y, scale_factor) {
     return items;
 }
 
-function diag_file_store(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_file_store = function(x, y, scale_factor) {
     const items = [];
 
     const width = 150;
@@ -129,7 +209,7 @@ function diag_file_store(x, y, scale_factor) {
     const box_height_scale = 1.6;
 
     const diag_type = 'file_store';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const tri_height = height / 3;
@@ -144,7 +224,7 @@ function diag_file_store(x, y, scale_factor) {
     return items;
 }
 
-function diag_message_store(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_message_store = function(x, y, scale_factor) {
     const items = [];
 
     const opts = new Map();
@@ -158,7 +238,7 @@ function diag_message_store(x, y, scale_factor) {
     const box_height_scale = 1;
 
     const diag_type = 'message_store';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const hh = height / 2;
@@ -181,7 +261,7 @@ function diag_message_store(x, y, scale_factor) {
     return items;
 }
 
-function diag_gear(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_gear = function(x, y, scale_factor) {
     const items = [];
 
     const width = 150;
@@ -192,7 +272,7 @@ function diag_gear(x, y, scale_factor) {
 
 
     const diag_type = 'gear';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const circle_attribs = {};
@@ -216,7 +296,7 @@ function diag_gear(x, y, scale_factor) {
     return items;
 }
 
-function diag_transform(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_transform = function(x, y, scale_factor) {
     const items = [];
 
     const width = 40;
@@ -226,7 +306,7 @@ function diag_transform(x, y, scale_factor) {
     const box_height_scale = 1.1;
 
     const diag_type = 'transform';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const item_size = 3;
@@ -290,7 +370,7 @@ function diag_transform(x, y, scale_factor) {
     return items;
 }
 
-function diag_server(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_server = function(x, y, scale_factor) {
     const items = [];
 
     const width = 100;
@@ -300,7 +380,7 @@ function diag_server(x, y, scale_factor) {
     const box_height_scale = 1.1;
 
     const diag_type = 'server';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const hw = width / 2;
@@ -336,7 +416,7 @@ function diag_server(x, y, scale_factor) {
     return items;
 }
 
-function diag_flatfile(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_flatfile = function(x, y, scale_factor) {
     const items = [];
 
     const width = 100;
@@ -346,7 +426,7 @@ function diag_flatfile(x, y, scale_factor) {
     const box_height_scale = .9;
 
     const diag_type = 'flatfile';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const x_scale = 8.5;
@@ -372,7 +452,7 @@ function diag_flatfile(x, y, scale_factor) {
     return items;
 }
 
-function diag_report(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_report = function(x, y, scale_factor) {
     const items = [];
 
     const width = 150;
@@ -382,7 +462,7 @@ function diag_report(x, y, scale_factor) {
     const box_height_scale = 1.4;
 
     const diag_type = 'report';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
@@ -401,7 +481,7 @@ function diag_report(x, y, scale_factor) {
     return items;
 }
 
-function diag_screen(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_screen = function(x, y, scale_factor) {
     const items = [];
 
     const width = 150;
@@ -411,7 +491,7 @@ function diag_screen(x, y, scale_factor) {
     const box_height_scale = 1.4;
 
     const diag_type = 'screen';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const hw = width / 2;

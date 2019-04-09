@@ -48,31 +48,31 @@ function svg_mouse_down(e) {
     var item_fn = null;
     
     if (opt == 'database') {
-        item_fn = diag_db;
+        item = diag.diag_db(xPosition, yPosition, sz_int);
     } else if (opt == 'object_store') {
-        item_fn = diag_object_store;
+        item = diag.diag_object_store(xPosition, yPosition, sz_int);
     } else if (opt == 'file_store') {
-        item_fn = diag_file_store;
+        item = diag.diag_file_store(xPosition, yPosition, sz_int);
     } else if (opt == 'message_store') {
-        item_fn = diag_message_store;
+        item = diag.diag_message_store(xPosition, yPosition, sz_int);
     } else if (opt == 'gear') {
-        item_fn = diag_gear;
+        item = diag.diag_gear(xPosition, yPosition, sz_int);
     } else if (opt == 'transform') {
-        item_fn = diag_transform;
+        item = diag.diag_transform(xPosition, yPosition, sz_int);
     } else if (opt == 'server') {
-        item_fn = diag_server;
+        item = diag.diag_server(xPosition, yPosition, sz_int);
     } else if (opt == 'flat_file') {
-        item_fn = diag_flatfile;
+        item = diag.diag_flatfile(xPosition, yPosition, sz_int);
     } else if (opt == 'report') {
-        item_fn = diag_report;
+        item = diag.diag_report(xPosition, yPosition, sz_int);
     } else if (opt == 'screen') {
-        item_fn = diag_screen;
+        item = diag.diag_screen(xPosition, yPosition, sz_int);
     }
     
     if (item_fn != null) {
         item = item_fn(xPosition, yPosition, sz_int);
-        diag.drawImmediateMulti(item);
     }
+    diag.drawImmediateMulti(item);
 }
 
 var svg = document.getElementById('my_svg');
