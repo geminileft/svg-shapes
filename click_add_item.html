@@ -56,9 +56,9 @@ function svg_mouse_down(e) {
     } else if (opt == 'message_store') {
         item = diag.diag_message_store(xPosition, yPosition, sz_int);
     } else if (opt == 'gear') {
-        item_fn = diag_gear;
+        item = diag.diag_gear(xPosition, yPosition, sz_int);
     } else if (opt == 'transform') {
-        item_fn = diag_transform;
+        item = diag.diag_transform(xPosition, yPosition, sz_int);
     } else if (opt == 'server') {
         item_fn = diag_server;
     } else if (opt == 'flat_file') {
