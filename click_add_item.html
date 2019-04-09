@@ -52,7 +52,7 @@ function svg_mouse_down(e) {
     } else if (opt == 'object_store') {
         item = diag.diag_object_store(xPosition, yPosition, sz_int);
     } else if (opt == 'file_store') {
-        item_fn = diag_file_store;
+        item = diag.diag_file_store(xPosition, yPosition, sz_int);
     } else if (opt == 'message_store') {
         item_fn = diag_message_store;
     } else if (opt == 'gear') {
