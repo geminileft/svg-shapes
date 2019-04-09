@@ -532,7 +532,7 @@ DataFlowDiagram.prototype.diag_flatfile = function(x, y, scale_factor) {
     return items;
 }
 
-function diag_report(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_report = function(x, y, scale_factor) {
     const items = [];
 
     const width = 150;
@@ -542,7 +542,7 @@ function diag_report(x, y, scale_factor) {
     const box_height_scale = 1.4;
 
     const diag_type = 'report';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
@@ -561,7 +561,7 @@ function diag_report(x, y, scale_factor) {
     return items;
 }
 
-function diag_screen(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_screen = function(x, y, scale_factor) {
     const items = [];
 
     const width = 150;
@@ -571,7 +571,7 @@ function diag_screen(x, y, scale_factor) {
     const box_height_scale = 1.4;
 
     const diag_type = 'screen';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const hw = width / 2;

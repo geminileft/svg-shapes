@@ -64,9 +64,9 @@ function svg_mouse_down(e) {
     } else if (opt == 'flat_file') {
         item = diag.diag_flatfile(xPosition, yPosition, sz_int);
     } else if (opt == 'report') {
-        item_fn = diag_report;
+        item = diag.diag_report(xPosition, yPosition, sz_int);
     } else if (opt == 'screen') {
-        item_fn = diag_screen;
+        item = diag.diag_screen(xPosition, yPosition, sz_int);
     }
     
     if (item_fn != null) {
