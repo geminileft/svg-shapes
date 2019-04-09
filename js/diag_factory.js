@@ -27,8 +27,66 @@ var yOffset = 0;
 
 function DataFlowDiagram(svg_context) {
     this.svg = svg_context;
+    this.svg.addEventListener("mousemove", this, false);
     this.children = [];
     this.interactiveMode = DIAG_INTERACTIVE_NONE;
+}
+
+DataFlowDiagram.prototype.handleEvent = function(e) {
+    if (e.type == 'mousedown') {
+        const el = e.currentTarget;
+        if (el.getAttribute(DIAG_INT_MODE_ATTR) == DIAG_INTERACTIVE_MOVE) {
+            initialX = e.offsetX;
+            initialY = e.offsetY;
+            const dbstr = 'initial x: ' + initialX.toString() + ' y: ' + initialY.toString()
+            active_item = el;
+            const bv = active_item.transform.baseVal;
+            for (var i = 0;i < bv.length; ++i) {
+                var tf = bv[i];
+                if (tf.type == TRANSFORM_TRANSLATE_VAL) {
+                    elementX = tf.matrix.e;
+                    elementY = tf.matrix.f;
+                }
+                else if (tf.type == TRANSFORM_SCALE_VAL) {
+                    elementScaleX = tf.matrix.a;
+                    elementScaleY = tf.matrix.d;
+                }
+                else if (tf.type == TRANSFORM_TRANSLATE_SCALE_VAL) {
+                    elementX = tf.matrix.e;
+                    elementY = tf.matrix.f;
+                    elementScaleX = tf.matrix.a;
+                    elementScaleY = tf.matrix.d;
+
+                }
+            }
+            e.stopPropagation();    
+        }
+    } else if (e.type == 'mousemove') {
+        if (active_item != null) {
+            const el = active_item;
+            if (el.getAttribute(DIAG_INT_MODE_ATTR) == DIAG_INTERACTIVE_MOVE) {
+                const currentX = e.offsetX;
+                const currentY = e.offsetY;
+                const deltaX = currentX - initialX;
+                const deltaY = currentY - initialY;
+                const nX = (elementX + deltaX).toString();
+                const nY = (elementY + deltaY).toString();
+                const dbstr = 'move x: ' + nX.toString() + ' y: ' + nY.toString()
+                // console.log(dbstr);
+                el.setAttribute('transform', 'translate(' + nX + ', ' + nY + ')')
+                const bv = active_item.transform.baseVal;
+                for (var i = 0;i < bv.length; ++i) {
+                    var tf = bv[i];
+                    if (tf.type == TRANSFORM_TRANSLATE_VAL) {
+                        tf.matrix.e = elementX + deltaX;
+                        tf.matrix.f = elementY + deltaY;
+                        break;
+                    }
+                }
+                    e.stopPropagation();
+            }
+        }    
+    }
 }
 
 DataFlowDiagram.prototype.drawImmediateSingle = function(child) {
@@ -152,6 +210,51 @@ function core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_w
     bounds_rect.style.visibility = 'hidden';
     diag_group.appendChild(bounds_rect);
     return diag_group;
+}
+
+DataFlowDiagram.prototype.core_group = function(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale) {
+
+    const box_w = width * box_width_scale;
+    const box_h = height * box_height_scale;
+
+    const hbw = box_w / 2;
+    const hbh = box_h / 2;
+
+    const bounds_rect = svg_rect(- hbw, -hbh, box_w, box_h, DIAG_ITEM_BG_RECT);
+    
+    const s_factor = scale_factor || 1.0;
+    var tf_str = 'translate(' + x + ', ' + y + ') scale(' + s_factor.toString() + ',' + s_factor.toString() + ')';
+    const diag_group = svg_group({'transform':tf_str});
+    diag_group.setAttribute(DIAG_TYPE_ATTR, diag_type);
+    diag_group.addEventListener("mousedown", this, false);
+    diag_group.addEventListener("mouseup", diag_mouseup_handler, false);
+    diag_group.addEventListener("mousemove", this, false);
+    bounds_rect.setAttribute(DIAG_SHOW_BOUNDS, false);
+    bounds_rect.style.visibility = 'hidden';
+    diag_group.appendChild(bounds_rect);
+    return diag_group;
+}
+
+DataFlowDiagram.prototype.diag_db = function(x, y, scale_factor) {
+    const items = [];
+
+    const width = 150;
+    const height = 100;
+
+    const box_width_scale = 1;
+    const box_height_scale = 1.5;
+
+    const diag_type = 'database';
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    items.push(diag_group);
+
+    const hw = width / 2;
+    const hh = height / 2;
+
+    diag_group.appendChild(create_data_top(- hw, -hh, width, height));
+    diag_group.appendChild(create_flexible_band(- hw, -hh, width, height, 0));
+    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
+    return items;
 }
 
 function diag_db(x, y, scale_factor) {

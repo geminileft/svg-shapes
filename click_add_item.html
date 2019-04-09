@@ -48,7 +48,7 @@ function svg_mouse_down(e) {
     var item_fn = null;
     
     if (opt == 'database') {
-        item_fn = diag_db;
+        item = diag.diag_db(xPosition, yPosition, sz_int);
     } else if (opt == 'object_store') {
         item_fn = diag_object_store;
     } else if (opt == 'file_store') {
@@ -71,8 +71,8 @@ function svg_mouse_down(e) {
     
     if (item_fn != null) {
         item = item_fn(xPosition, yPosition, sz_int);
-        diag.drawImmediateMulti(item);
     }
+    diag.drawImmediateMulti(item);
 }
 
 var svg = document.getElementById('my_svg');
