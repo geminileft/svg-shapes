@@ -304,7 +304,7 @@ DataFlowDiagram.prototype.diag_file_store = function(x, y, scale_factor) {
     return items;
 }
 
-function diag_message_store(x, y, scale_factor) {
+DataFlowDiagram.prototype.diag_message_store = function(x, y, scale_factor) {
     const items = [];
 
     const opts = new Map();
@@ -318,7 +318,7 @@ function diag_message_store(x, y, scale_factor) {
     const box_height_scale = 1;
 
     const diag_type = 'message_store';
-    const diag_group = core_diag_grouping2(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
+    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
     items.push(diag_group);
 
     const hh = height / 2;
