@@ -28,6 +28,14 @@ var yOffset = 0;
 function DataFlowDiagram(svg_context) {
     this.svg = svg_context;
     this.svg.addEventListener("mousemove", this, false);
+
+    var ancestor_parent = this.svg.parentElement;
+
+    while (ancestor_parent != null) {
+        ancestor_parent.addEventListener("mousemove", this, false);
+        ancestor_parent = ancestor_parent.parentElement;
+    }
+
     this.children = [];
     this.interactiveMode = DIAG_INTERACTIVE_NONE;
 }
@@ -63,6 +71,16 @@ DataFlowDiagram.prototype.handleEvent = function(e) {
         }
     } else if (e.type == 'mousemove') {
         if (active_item != null) {
+
+            var ancestor_parent = this.svg.parentElement;
+            while (ancestor_parent != null) {
+                if (e.currentTarget == this.svg.parentElement) {
+                    active_item = null;
+                    return;
+                }
+                ancestor_parent = ancestor_parent.parentElement;
+            }
+
             const el = active_item;
             if (el.getAttribute(DIAG_INT_MODE_ATTR) == DIAG_INTERACTIVE_MOVE) {
                 const currentX = e.offsetX;
