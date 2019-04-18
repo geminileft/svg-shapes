@@ -345,10 +345,6 @@ DataFlowDiagram.prototype.diag_transform = function(x, y, scale_factor) {
     const box_width_scale = 2.5;
     const box_height_scale = 1.1;
 
-    const diag_type = 'transform';
-    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
-    items.push(diag_group);
-
     const item_size = 3;
     const line_width = (item_size * 4).toString();
 
@@ -378,9 +374,9 @@ DataFlowDiagram.prototype.diag_transform = function(x, y, scale_factor) {
 
     var path_d = quad_bez_path(start_x, start_y, compare_x, compare_y, end_x, end_y);
 
-    diag_group.appendChild(svg_path(path_d, {'fill':'none', 'stroke':'black', "stroke-width":line_width}));
-    diag_group.appendChild(svg_path(path_d, {'transform':"rotate(-120, 0, 0)", 'stroke':'black', 'fill':'none', "stroke-width":line_width}));
-    diag_group.appendChild(svg_path(path_d, {'transform':"rotate(-240, 0, 0)", 'stroke':'black', 'fill':'none', "stroke-width":line_width}));
+    items.push(svg_path(path_d, {'fill':'none', 'stroke':'black', "stroke-width":line_width}));
+    items.push(svg_path(path_d, {'transform':"rotate(-120, 0, 0)", 'stroke':'black', 'fill':'none', "stroke-width":line_width}));
+    items.push(svg_path(path_d, {'transform':"rotate(-240, 0, 0)", 'stroke':'black', 'fill':'none', "stroke-width":line_width}));
 
     const tri_scale = 2.7 * item_size;
 
@@ -398,16 +394,18 @@ DataFlowDiagram.prototype.diag_transform = function(x, y, scale_factor) {
     const size_sf_str = (item_size * 1.3).toString();
 
     path_d = "M " + tri_x_l + "," + tri_y_l + " L" + tri_x_r + "," + tri_y_r + " L" + point_x + "," + point_y + " z";
-    diag_group.appendChild(svg_path(path_d, {"stroke-width": size_sf_str, 'stroke':'black', 'fill':'black'}));
+    items.push(svg_path(path_d, {"stroke-width": size_sf_str, 'stroke':'black', 'fill':'black'}));
     
     path_d = "M " + tri_x_l + "," + tri_y_l + " L" + tri_x_r + "," + tri_y_r + " L" + point_x + "," + point_y + " z";
-    diag_group.appendChild(svg_path(path_d, {"stroke-width": size_sf_str, 'stroke':'black', 'fill':'black', 'transform':"rotate(-120, 0, 0)"}));
+    items.push(svg_path(path_d, {"stroke-width": size_sf_str, 'stroke':'black', 'fill':'black', 'transform':"rotate(-120, 0, 0)"}));
     
     path_d = "M " + tri_x_l + "," + tri_y_l + " L" + tri_x_r + "," + tri_y_r + " L" + point_x + "," + point_y + " z";
-    diag_group.appendChild(svg_path(path_d, {"stroke-width": size_sf_str, 'stroke':'black', 'fill':'black', 'transform':"rotate(-240, 0, 0)"}));
+    items.push(svg_path(path_d, {"stroke-width": size_sf_str, 'stroke':'black', 'fill':'black', 'transform':"rotate(-240, 0, 0)"}));
 
-    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
-    return items;
+    const diag_type = 'transform';
+    const diag_group = this.core_group2(x, y, scale_factor, diag_type, width,
+        height, box_width_scale, box_height_scale, items);
+    return [diag_group];
 }
 
 DataFlowDiagram.prototype.diag_server = function(x, y, scale_factor) {
@@ -418,10 +416,6 @@ DataFlowDiagram.prototype.diag_server = function(x, y, scale_factor) {
 
     const box_width_scale = 1.1;
     const box_height_scale = 1.1;
-
-    const diag_type = 'server';
-    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
-    items.push(diag_group);
 
     const hw = width / 2;
     const hh = height / 2;
@@ -447,13 +441,15 @@ DataFlowDiagram.prototype.diag_server = function(x, y, scale_factor) {
     const drive_attribs = {'rx':'2', 'ry':'2', 'fill':drive_color};
 
     const chassis_attr = {'rx':'5', 'ry':'5', 'stroke':'black', 'fill':server_fill, "stroke-width":5};
-    diag_group.appendChild(svg_rect(- hw, -hh, width, height, chassis_attr));
-    diag_group.appendChild(svg_rect(drive_x, drive_y, drive_width, drive_height, drive_attribs));
-    diag_group.appendChild(svg_rect(drive_x, drive_y + drive_height + (height * drive_off_pctg), drive_width, drive_height, drive_attribs));
-    diag_group.appendChild(svg_rect(drive_x, drive_y + (2 * (drive_height + (height * drive_off_pctg))), drive_width, drive_height, drive_attribs));
+    items.push(svg_rect(- hw, -hh, width, height, chassis_attr));
+    items.push(svg_rect(drive_x, drive_y, drive_width, drive_height, drive_attribs));
+    items.push(svg_rect(drive_x, drive_y + drive_height + (height * drive_off_pctg), drive_width, drive_height, drive_attribs));
+    items.push(svg_rect(drive_x, drive_y + (2 * (drive_height + (height * drive_off_pctg))), drive_width, drive_height, drive_attribs));
 
-    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
-    return items;
+    const diag_type = 'server';
+    const diag_group = this.core_group2(x, y, scale_factor, diag_type,
+        width, height, box_width_scale, box_height_scale, items);
+    return [diag_group];
 }
 
 DataFlowDiagram.prototype.diag_flatfile = function(x, y, scale_factor) {
