@@ -461,10 +461,6 @@ DataFlowDiagram.prototype.diag_flatfile = function(x, y, scale_factor) {
     const box_width_scale = 1.1;
     const box_height_scale = .9;
 
-    const diag_type = 'flatfile';
-    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
-    items.push(diag_group);
-
     const x_scale = 8.5;
     const y_scale = 11;
 
@@ -482,10 +478,12 @@ DataFlowDiagram.prototype.diag_flatfile = function(x, y, scale_factor) {
     const by = (y_scale * sc).toString();
     
     const poly_pts = lx + ", " + ty + " " + nrx + ", " + ty + " " + rx + ", " + qy + " " + rx + ", " + by + " " + lx + ", " + by;
-    diag_group.appendChild(svg_polygon(poly_pts));
+    items.push(svg_polygon(poly_pts));
 
-    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
-    return items;
+    const diag_type = 'flatfile';
+    const diag_group = this.core_group2(x, y, scale_factor, diag_type, width,
+        height, box_width_scale, box_height_scale, items);
+    return [diag_group];
 }
 
 DataFlowDiagram.prototype.diag_report = function(x, y, scale_factor) {
@@ -497,10 +495,6 @@ DataFlowDiagram.prototype.diag_report = function(x, y, scale_factor) {
     const box_width_scale = 1.05;
     const box_height_scale = 1.4;
 
-    const diag_type = 'report';
-    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
-    items.push(diag_group);
-
     const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
 
     const hw = width / 2;
@@ -508,13 +502,15 @@ DataFlowDiagram.prototype.diag_report = function(x, y, scale_factor) {
     const sc_off = 15;
     const sc_base_w = 20; //width of the screen base
 
-    diag_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
+    items.push(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
 
-    diag_group.appendChild(svg_line(0, sc_off + 5, 0, hh, 'black', {'stroke-width':'5'}))
-    diag_group.appendChild(svg_line(-sc_base_w, hh, sc_base_w, hh, 'black', {'stroke-width':'5'}))
+    items.push(svg_line(0, sc_off + 5, 0, hh, 'black', {'stroke-width':'5'}))
+    items.push(svg_line(-sc_base_w, hh, sc_base_w, hh, 'black', {'stroke-width':'5'}))
 
-    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
-    return items;
+    const diag_type = 'report';
+    const diag_group = this.core_group2(x, y, scale_factor, diag_type, width,
+        height, box_width_scale, box_height_scale, items);
+    return [diag_group];
 }
 
 DataFlowDiagram.prototype.diag_screen = function(x, y, scale_factor) {
@@ -526,25 +522,23 @@ DataFlowDiagram.prototype.diag_screen = function(x, y, scale_factor) {
     const box_width_scale = 1.05;
     const box_height_scale = 1.4;
 
-    const diag_type = 'screen';
-    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
-    items.push(diag_group);
-
     const hw = width / 2;
     const hh = height / 2;
     const sc_off = 15;
     const sc_base_w = 25; //width of the screen base
     const rpt_attribs = {'rx':'5', 'ry':'5', 'fill':'none', 'stroke':'black', 'stroke-width':'5'};
 
-    diag_group.appendChild(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
+    items.push(svg_rect(- hw, -hh - sc_off, width, height - sc_off, rpt_attribs));
 
     const b_neck_w = sc_base_w / 3.5; //base neck width
 
     var path_d = quad_bez_path(-b_neck_w, sc_off + 5, -b_neck_w, hh, -sc_base_w, hh);
     path_d = path_d + ' l' + (sc_base_w * 2).toString() + ',0'
     path_d = path_d + ' Q' + b_neck_w + ',' + hh + ' ' + b_neck_w + ',' + (sc_off + 5).toString()
-    diag_group.appendChild(svg_path(path_d, {'stroke-width':'5', 'stroke':'black', 'fill':'black', 'stroke-linecap':'round'}));
+    items.push(svg_path(path_d, {'stroke-width':'5', 'stroke':'black', 'fill':'black', 'stroke-linecap':'round'}));
 
-    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
-    return items;
+    const diag_type = 'screen';
+    const diag_group = this.core_group2(x, y, scale_factor, diag_type, width,
+        height, box_width_scale, box_height_scale, items);
+    return [diag_group];
 }
