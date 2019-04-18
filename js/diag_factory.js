@@ -107,16 +107,18 @@ DataFlowDiagram.prototype.handleEvent = function(e) {
     }
 }
 
-DataFlowDiagram.prototype.drawImmediateSingle = function(child) {
-    child.setAttribute(DIAG_INT_MODE_ATTR, this.interactiveMode);
-    if (this.interactiveMode) {
-        for (var i = 0;i < child.childNodes.length; ++i) {
-            var cn = child.childNodes[i];
-            if (cn.hasAttribute(DIAG_SHOW_BOUNDS)) {
-                cn.style.visibility = 'visible';
-            }
+function set_child_interactive_mode(child, mode) {
+    child.setAttribute(DIAG_INT_MODE_ATTR, mode);
+    for (var j = 0;j < child.childNodes.length; ++j) {
+        var cn = child.childNodes[j];
+        if (cn.hasAttribute(DIAG_SHOW_BOUNDS)) {
+            cn.style.visibility = (mode == DIAG_INTERACTIVE_MOVE) ? 'visible' : 'hidden';
         }
     }
+}
+
+DataFlowDiagram.prototype.drawImmediateSingle = function(child) {
+    set_child_interactive_mode(child, this.interactiveMode);
     this.svg.appendChild(child);
     this.children.push(child);
 }
@@ -132,7 +134,7 @@ DataFlowDiagram.prototype.setInteractiveMode = function(mode) {
     this.interactiveMode = mode;
     for (var i = 0;i < this.children.length; ++i) {
         child = this.children[i];
-        child.setAttribute(DIAG_INT_MODE_ATTR, this.interactiveMode);
+        set_child_interactive_mode(child, this.interactiveMode);
     }
 }
 
