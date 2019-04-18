@@ -234,18 +234,17 @@ DataFlowDiagram.prototype.diag_object_store = function(x, y, scale_factor) {
 
     const box_width_scale = 1;
     const box_height_scale = 1.5;
-    
-    const diag_type = 'object_store';
-    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
-    items.push(diag_group);
 
     const hw = width / 2;
     const hh = height / 2;
 
-    diag_group.appendChild(create_data_top(- hw, - hh, width, height));
-    diag_group.appendChild(create_flexible_band(- hw, - hh, width, height, 25));
-    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
-    return items;
+    items.push(create_data_top(- hw, - hh, width, height));
+    items.push(create_flexible_band(- hw, - hh, width, height, 25));
+    
+    const diag_type = 'object_store';
+    const diag_group = this.core_group2(x, y, scale_factor, diag_type, width,
+        height, box_width_scale, box_height_scale, items);
+    return [diag_group];
 }
 
 DataFlowDiagram.prototype.diag_file_store = function(x, y, scale_factor) {
@@ -257,20 +256,19 @@ DataFlowDiagram.prototype.diag_file_store = function(x, y, scale_factor) {
     const box_width_scale = 1;
     const box_height_scale = 1.6;
 
-    const diag_type = 'file_store';
-    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
-    items.push(diag_group);
-
     const tri_height = height / 3;
     const hw = width / 2;
     const y_off = (1.5 * tri_height) + 7;
 
-    diag_group.appendChild(create_data_top(- hw, - y_off, width, height));
-    diag_group.appendChild(create_flexible_band(- hw, - y_off, width, tri_height, 0));
-    diag_group.appendChild(create_flexible_band(- hw, tri_height + 5 - y_off, width, tri_height, 0));
-    diag_group.appendChild(create_flexible_band(- hw, (2 * tri_height) + 10 - y_off, width, tri_height, 0));
-    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
-    return items;
+    items.push(create_data_top(- hw, - y_off, width, height));
+    items.push(create_flexible_band(- hw, - y_off, width, tri_height, 0));
+    items.push(create_flexible_band(- hw, tri_height + 5 - y_off, width, tri_height, 0));
+    items.push(create_flexible_band(- hw, (2 * tri_height) + 10 - y_off, width, tri_height, 0));
+
+    const diag_type = 'file_store';
+    const diag_group = this.core_group2(x, y, scale_factor, diag_type, width,
+        height, box_width_scale, box_height_scale, items);
+    return [diag_group];
 }
 
 DataFlowDiagram.prototype.diag_message_store = function(x, y, scale_factor) {
