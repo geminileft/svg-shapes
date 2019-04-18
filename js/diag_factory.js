@@ -130,7 +130,8 @@ DataFlowDiagram.prototype.drawImmediateMulti = function(children) {
 
 DataFlowDiagram.prototype.setInteractiveMode = function(mode) {
     this.interactiveMode = mode;
-    for (var child in this.children) {
+    for (var i = 0;i < this.children.length; ++i) {
+        child = this.children[i];
         child.setAttribute(DIAG_INT_MODE_ATTR, this.interactiveMode);
     }
 }
