@@ -284,10 +284,6 @@ DataFlowDiagram.prototype.diag_message_store = function(x, y, scale_factor) {
     const box_width_scale = 1.6;
     const box_height_scale = 1;
 
-    const diag_type = 'message_store';
-    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
-    items.push(diag_group);
-
     const hh = height / 2;
 
     const unit_width = (!opts.has('unit_width')) ? 40 : opts.get('unit_width');
@@ -297,15 +293,16 @@ DataFlowDiagram.prototype.diag_message_store = function(x, y, scale_factor) {
 
     const x_off = 2 * unit_width;
 
-    diag_group.appendChild(create_side_cover(0 + x_off, 0 - hh, height, opts));
+    items.push(create_side_cover(0 + x_off, 0 - hh, height, opts));
 
     for (var i = 0;i < bands; ++i) {
-        diag_group.appendChild(create_side_band((x_off - unit_width * i) + (4 * i) + (i * adj_w), -hh, width, height, 0, unit_width));
+        items.push(create_side_band((x_off - unit_width * i) + (4 * i) + (i * adj_w), -hh, width, height, 0, unit_width));
     }
 
-    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
-
-    return items;
+    const diag_type = 'message_store';
+    const diag_group = this.core_group2(x, y, scale_factor, diag_type, width,
+        height, box_width_scale, box_height_scale, items);
+    return [diag_group];
 }
 
 DataFlowDiagram.prototype.diag_gear = function(x, y, scale_factor) {
@@ -317,30 +314,26 @@ DataFlowDiagram.prototype.diag_gear = function(x, y, scale_factor) {
     const box_width_scale = .75;
     const box_height_scale = 1.1;
 
-
-    const diag_type = 'gear';
-    const diag_group = this.core_group(x, y, scale_factor, diag_type, width, height, box_width_scale, box_height_scale)
-    items.push(diag_group);
-
     const circle_attribs = {};
     circle_attribs['stroke']="black";
     circle_attribs['stroke-width']="10";
     circle_attribs['fill']="none";
 
-    diag_group.appendChild(svg_circle(0, 0, 40, circle_attribs));
+    items.push(svg_circle(0, 0, 40, circle_attribs));
     
     var path_d = "m0,-43 l-10,0 l3,-10 l14,0 l3,10 z";
-    diag_group.appendChild(svg_path(path_d));
+    items.push(svg_path(path_d));
 
     for (var i = 1;i < 8; ++i) {
         const angle_in_deg = 45 * i;
         tf_str = 'rotate(' + angle_in_deg.toString() + ', 0, 0)';
-        diag_group.appendChild(svg_path(path_d, {'transform':tf_str}));
+        items.push(svg_path(path_d, {'transform':tf_str}));
     }
 
-    diag_group.appendChild(svg_circle(0, 0, 5, {'fill':'blue'}));
-
-    return items;
+    const diag_type = 'gear';
+    const diag_group = this.core_group2(x, y, scale_factor, diag_type, width,
+        height, box_width_scale, box_height_scale, items);
+    return [diag_group];
 }
 
 DataFlowDiagram.prototype.diag_transform = function(x, y, scale_factor) {
