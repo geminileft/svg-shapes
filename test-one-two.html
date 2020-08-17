@@ -17,11 +17,15 @@
 <script>
     var svg = document.getElementById('my_svg');
     const rect = svg_rect(20, 390, 70, 20);
+    const rect2 = svg_rect(20, 290, 70, 20);
     const path1 = svg_path("M 100 400 C 300 400, 400 300, 500 300", {'stroke':'black', 'fill':'transparent'});
     const path2 = svg_path("M 100 400 C 300 400, 400 500, 500 500", {'stroke':'black', 'fill':'transparent'});
+    const path3 = svg_path("M 100 300 C 300 300, 400 500, 500 500", {'stroke':'black', 'fill':'transparent'});
     svg.appendChild(rect);
+    svg.appendChild(rect2);
     svg.appendChild(path1);
     svg.appendChild(path2);
+    svg.appendChild(path3);
 
 </script>
 </body>
