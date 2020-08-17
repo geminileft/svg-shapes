@@ -1,2 +1,2 @@
 # SVG JS Utils
-A javascript library to programmatically work with [SVG](https://developer.mozilla.org/en-US/docs/Web/SVG).
+A javascript library to programmatically work with [SVG](https://developer.mozilla.org/en-US/docs/Web/SVG). Please refer to the [documentation](https://geminileft.github.io/svg-shapes/) for more info.
